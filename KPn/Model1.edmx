@@ -1,0 +1,640 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище NovotekModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Contracts">
+          <Key>
+            <PropertyRef Name="ContractID" />
+          </Key>
+          <Property Name="ContractID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RealtyID" Type="int" Nullable="false" />
+          <Property Name="TenantID" Type="int" Nullable="false" />
+          <Property Name="ContractNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
+          <Property Name="EndDate" Type="date" Nullable="false" />
+          <Property Name="MonthlyRent" Type="decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="Deposit" Type="decimal" Precision="15" Scale="2" />
+          <Property Name="ContractStatusID" Type="int" Nullable="false" />
+          <Property Name="PaymentDueDay" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ContractStatuses">
+          <Key>
+            <PropertyRef Name="ContractStatusID" />
+          </Key>
+          <Property Name="ContractStatusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Owners">
+          <Key>
+            <PropertyRef Name="OwnerID" />
+          </Key>
+          <Property Name="OwnerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" />
+          <Property Name="Address" Type="nvarchar" MaxLength="500" />
+          <Property Name="INN" Type="nvarchar" MaxLength="12" />
+          <Property Name="BankDetails" Type="nvarchar(max)" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Payments">
+          <Key>
+            <PropertyRef Name="PaymentID" />
+          </Key>
+          <Property Name="PaymentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContractID" Type="int" Nullable="false" />
+          <Property Name="PaymentDate" Type="date" Nullable="false" />
+          <Property Name="Amount" Type="decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="Period" Type="date" Nullable="false" />
+          <Property Name="PaymentMethod" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Realty">
+          <Key>
+            <PropertyRef Name="RealtyID" />
+          </Key>
+          <Property Name="RealtyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OwnerID" Type="int" Nullable="false" />
+          <Property Name="RealtyTypeID" Type="int" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="SquareMeters" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Floor" Type="int" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="IsOwned" Type="bit" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RealtyTypes">
+          <Key>
+            <PropertyRef Name="RealtyTypeID" />
+          </Key>
+          <Property Name="RealtyTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="60" />
+          <Property Name="Descripsion" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Tenants">
+          <Key>
+            <PropertyRef Name="TenantID" />
+          </Key>
+          <Property Name="TenantID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" />
+          <Property Name="LegalAddress" Type="nvarchar" MaxLength="500" />
+          <Property Name="INN" Type="nvarchar" MaxLength="12" />
+          <Property Name="DirectorName" Type="nvarchar" MaxLength="255" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Login" Type="nvarchar" MaxLength="60" />
+          <Property Name="Password" Type="nvarchar" MaxLength="60" />
+          <Property Name="RoleID" Type="int" />
+          <Property Name="PasswordHash" Type="nvarchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Contracts__Contr__5441852A">
+          <End Role="ContractStatuses" Type="Self.ContractStatuses" Multiplicity="1" />
+          <End Role="Contracts" Type="Self.Contracts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ContractStatuses">
+              <PropertyRef Name="ContractStatusID" />
+            </Principal>
+            <Dependent Role="Contracts">
+              <PropertyRef Name="ContractStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Contracts__Realt__52593CB8">
+          <End Role="Realty" Type="Self.Realty" Multiplicity="1" />
+          <End Role="Contracts" Type="Self.Contracts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Realty">
+              <PropertyRef Name="RealtyID" />
+            </Principal>
+            <Dependent Role="Contracts">
+              <PropertyRef Name="RealtyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Contracts__Tenan__534D60F1">
+          <End Role="Tenants" Type="Self.Tenants" Multiplicity="1" />
+          <End Role="Contracts" Type="Self.Contracts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tenants">
+              <PropertyRef Name="TenantID" />
+            </Principal>
+            <Dependent Role="Contracts">
+              <PropertyRef Name="TenantID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Payments__Contra__5812160E">
+          <End Role="Contracts" Type="Self.Contracts" Multiplicity="1" />
+          <End Role="Payments" Type="Self.Payments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contracts">
+              <PropertyRef Name="ContractID" />
+            </Principal>
+            <Dependent Role="Payments">
+              <PropertyRef Name="ContractID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Realty__OwnerID__49C3F6B7">
+          <End Role="Owners" Type="Self.Owners" Multiplicity="1" />
+          <End Role="Realty" Type="Self.Realty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Owners">
+              <PropertyRef Name="OwnerID" />
+            </Principal>
+            <Dependent Role="Realty">
+              <PropertyRef Name="OwnerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Realty__RealtyTy__4AB81AF0">
+          <End Role="RealtyTypes" Type="Self.RealtyTypes" Multiplicity="1" />
+          <End Role="Realty" Type="Self.Realty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RealtyTypes">
+              <PropertyRef Name="RealtyTypeID" />
+            </Principal>
+            <Dependent Role="Realty">
+              <PropertyRef Name="RealtyTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Users__RoleID__5CD6CB2B">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище NovotekModelContainer">
+          <EntitySet Name="Contracts" EntityType="Self.Contracts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ContractStatuses" EntityType="Self.ContractStatuses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Owners" EntityType="Self.Owners" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Payments" EntityType="Self.Payments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Realty" EntityType="Self.Realty" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RealtyTypes" EntityType="Self.RealtyTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tenants" EntityType="Self.Tenants" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Contracts__Contr__5441852A" Association="Self.FK__Contracts__Contr__5441852A">
+            <End Role="ContractStatuses" EntitySet="ContractStatuses" />
+            <End Role="Contracts" EntitySet="Contracts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Contracts__Realt__52593CB8" Association="Self.FK__Contracts__Realt__52593CB8">
+            <End Role="Realty" EntitySet="Realty" />
+            <End Role="Contracts" EntitySet="Contracts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Contracts__Tenan__534D60F1" Association="Self.FK__Contracts__Tenan__534D60F1">
+            <End Role="Tenants" EntitySet="Tenants" />
+            <End Role="Contracts" EntitySet="Contracts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Payments__Contra__5812160E" Association="Self.FK__Payments__Contra__5812160E">
+            <End Role="Contracts" EntitySet="Contracts" />
+            <End Role="Payments" EntitySet="Payments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Realty__OwnerID__49C3F6B7" Association="Self.FK__Realty__OwnerID__49C3F6B7">
+            <End Role="Owners" EntitySet="Owners" />
+            <End Role="Realty" EntitySet="Realty" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Realty__RealtyTy__4AB81AF0" Association="Self.FK__Realty__RealtyTy__4AB81AF0">
+            <End Role="RealtyTypes" EntitySet="RealtyTypes" />
+            <End Role="Realty" EntitySet="Realty" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Users__RoleID__5CD6CB2B" Association="Self.FK__Users__RoleID__5CD6CB2B">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="NovotekModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Contracts">
+          <Key>
+            <PropertyRef Name="ContractID" />
+          </Key>
+          <Property Name="ContractID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RealtyID" Type="Int32" Nullable="false" />
+          <Property Name="TenantID" Type="Int32" Nullable="false" />
+          <Property Name="ContractNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="MonthlyRent" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="Deposit" Type="Decimal" Precision="15" Scale="2" />
+          <Property Name="ContractStatusID" Type="Int32" Nullable="false" />
+          <Property Name="PaymentDueDay" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="ContractStatuses" Relationship="Self.FK__Contracts__Contr__5441852A" FromRole="Contracts" ToRole="ContractStatuses" />
+          <NavigationProperty Name="Realty" Relationship="Self.FK__Contracts__Realt__52593CB8" FromRole="Contracts" ToRole="Realty" />
+          <NavigationProperty Name="Tenants" Relationship="Self.FK__Contracts__Tenan__534D60F1" FromRole="Contracts" ToRole="Tenants" />
+          <NavigationProperty Name="Payments" Relationship="Self.FK__Payments__Contra__5812160E" FromRole="Contracts" ToRole="Payments" />
+        </EntityType>
+        <EntityType Name="ContractStatuses">
+          <Key>
+            <PropertyRef Name="ContractStatusID" />
+          </Key>
+          <Property Name="ContractStatusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Contracts" Relationship="Self.FK__Contracts__Contr__5441852A" FromRole="ContractStatuses" ToRole="Contracts" />
+        </EntityType>
+        <EntityType Name="Owners">
+          <Key>
+            <PropertyRef Name="OwnerID" />
+          </Key>
+          <Property Name="OwnerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="INN" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="BankDetails" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Realty" Relationship="Self.FK__Realty__OwnerID__49C3F6B7" FromRole="Owners" ToRole="Realty" />
+        </EntityType>
+        <EntityType Name="Payments">
+          <Key>
+            <PropertyRef Name="PaymentID" />
+          </Key>
+          <Property Name="PaymentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContractID" Type="Int32" Nullable="false" />
+          <Property Name="PaymentDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Amount" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
+          <Property Name="Period" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="PaymentMethod" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Contracts" Relationship="Self.FK__Payments__Contra__5812160E" FromRole="Payments" ToRole="Contracts" />
+        </EntityType>
+        <EntityType Name="Realty">
+          <Key>
+            <PropertyRef Name="RealtyID" />
+          </Key>
+          <Property Name="RealtyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OwnerID" Type="Int32" Nullable="false" />
+          <Property Name="RealtyTypeID" Type="Int32" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SquareMeters" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Floor" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsOwned" Type="Boolean" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Contracts" Relationship="Self.FK__Contracts__Realt__52593CB8" FromRole="Realty" ToRole="Contracts" />
+          <NavigationProperty Name="Owners" Relationship="Self.FK__Realty__OwnerID__49C3F6B7" FromRole="Realty" ToRole="Owners" />
+          <NavigationProperty Name="RealtyTypes" Relationship="Self.FK__Realty__RealtyTy__4AB81AF0" FromRole="Realty" ToRole="RealtyTypes" />
+        </EntityType>
+        <EntityType Name="RealtyTypes">
+          <Key>
+            <PropertyRef Name="RealtyTypeID" />
+          </Key>
+          <Property Name="RealtyTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Realty" Relationship="Self.FK__Realty__RealtyTy__4AB81AF0" FromRole="RealtyTypes" ToRole="Realty" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="Descripsion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Users" Relationship="Self.FK__Users__RoleID__5CD6CB2B" FromRole="Role" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Tenants">
+          <Key>
+            <PropertyRef Name="TenantID" />
+          </Key>
+          <Property Name="TenantID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LegalAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="INN" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="DirectorName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Contracts" Relationship="Self.FK__Contracts__Tenan__534D60F1" FromRole="Tenants" ToRole="Contracts" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Login" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="RoleID" Type="Int32" />
+          <NavigationProperty Name="Role" Relationship="Self.FK__Users__RoleID__5CD6CB2B" FromRole="Users" ToRole="Role" />
+          <Property Name="PasswordHash" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK__Contracts__Contr__5441852A">
+          <End Role="ContractStatuses" Type="Self.ContractStatuses" Multiplicity="1" />
+          <End Role="Contracts" Type="Self.Contracts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ContractStatuses">
+              <PropertyRef Name="ContractStatusID" />
+            </Principal>
+            <Dependent Role="Contracts">
+              <PropertyRef Name="ContractStatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Contracts__Realt__52593CB8">
+          <End Role="Realty" Type="Self.Realty" Multiplicity="1" />
+          <End Role="Contracts" Type="Self.Contracts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Realty">
+              <PropertyRef Name="RealtyID" />
+            </Principal>
+            <Dependent Role="Contracts">
+              <PropertyRef Name="RealtyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Contracts__Tenan__534D60F1">
+          <End Role="Tenants" Type="Self.Tenants" Multiplicity="1" />
+          <End Role="Contracts" Type="Self.Contracts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tenants">
+              <PropertyRef Name="TenantID" />
+            </Principal>
+            <Dependent Role="Contracts">
+              <PropertyRef Name="TenantID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Payments__Contra__5812160E">
+          <End Role="Contracts" Type="Self.Contracts" Multiplicity="1" />
+          <End Role="Payments" Type="Self.Payments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contracts">
+              <PropertyRef Name="ContractID" />
+            </Principal>
+            <Dependent Role="Payments">
+              <PropertyRef Name="ContractID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Realty__OwnerID__49C3F6B7">
+          <End Role="Owners" Type="Self.Owners" Multiplicity="1" />
+          <End Role="Realty" Type="Self.Realty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Owners">
+              <PropertyRef Name="OwnerID" />
+            </Principal>
+            <Dependent Role="Realty">
+              <PropertyRef Name="OwnerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Realty__RealtyTy__4AB81AF0">
+          <End Role="RealtyTypes" Type="Self.RealtyTypes" Multiplicity="1" />
+          <End Role="Realty" Type="Self.Realty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RealtyTypes">
+              <PropertyRef Name="RealtyTypeID" />
+            </Principal>
+            <Dependent Role="Realty">
+              <PropertyRef Name="RealtyTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Users__RoleID__5CD6CB2B">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="NovotekEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Contracts" EntityType="Self.Contracts" />
+          <EntitySet Name="ContractStatuses" EntityType="Self.ContractStatuses" />
+          <EntitySet Name="Owners" EntityType="Self.Owners" />
+          <EntitySet Name="Payments" EntityType="Self.Payments" />
+          <EntitySet Name="Realty" EntityType="Self.Realty" />
+          <EntitySet Name="RealtyTypes" EntityType="Self.RealtyTypes" />
+          <EntitySet Name="Role" EntityType="Self.Role" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Tenants" EntityType="Self.Tenants" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <AssociationSet Name="FK__Contracts__Contr__5441852A" Association="Self.FK__Contracts__Contr__5441852A">
+            <End Role="ContractStatuses" EntitySet="ContractStatuses" />
+            <End Role="Contracts" EntitySet="Contracts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Contracts__Realt__52593CB8" Association="Self.FK__Contracts__Realt__52593CB8">
+            <End Role="Realty" EntitySet="Realty" />
+            <End Role="Contracts" EntitySet="Contracts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Contracts__Tenan__534D60F1" Association="Self.FK__Contracts__Tenan__534D60F1">
+            <End Role="Tenants" EntitySet="Tenants" />
+            <End Role="Contracts" EntitySet="Contracts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Payments__Contra__5812160E" Association="Self.FK__Payments__Contra__5812160E">
+            <End Role="Contracts" EntitySet="Contracts" />
+            <End Role="Payments" EntitySet="Payments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Realty__OwnerID__49C3F6B7" Association="Self.FK__Realty__OwnerID__49C3F6B7">
+            <End Role="Owners" EntitySet="Owners" />
+            <End Role="Realty" EntitySet="Realty" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Realty__RealtyTy__4AB81AF0" Association="Self.FK__Realty__RealtyTy__4AB81AF0">
+            <End Role="RealtyTypes" EntitySet="RealtyTypes" />
+            <End Role="Realty" EntitySet="Realty" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Users__RoleID__5CD6CB2B" Association="Self.FK__Users__RoleID__5CD6CB2B">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище NovotekModelContainer" CdmEntityContainer="NovotekEntities">
+          <EntitySetMapping Name="Contracts">
+            <EntityTypeMapping TypeName="NovotekModel.Contracts">
+              <MappingFragment StoreEntitySet="Contracts">
+                <ScalarProperty Name="ContractID" ColumnName="ContractID" />
+                <ScalarProperty Name="RealtyID" ColumnName="RealtyID" />
+                <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+                <ScalarProperty Name="ContractNumber" ColumnName="ContractNumber" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="MonthlyRent" ColumnName="MonthlyRent" />
+                <ScalarProperty Name="Deposit" ColumnName="Deposit" />
+                <ScalarProperty Name="ContractStatusID" ColumnName="ContractStatusID" />
+                <ScalarProperty Name="PaymentDueDay" ColumnName="PaymentDueDay" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ContractStatuses">
+            <EntityTypeMapping TypeName="NovotekModel.ContractStatuses">
+              <MappingFragment StoreEntitySet="ContractStatuses">
+                <ScalarProperty Name="ContractStatusID" ColumnName="ContractStatusID" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Owners">
+            <EntityTypeMapping TypeName="NovotekModel.Owners">
+              <MappingFragment StoreEntitySet="Owners">
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="INN" ColumnName="INN" />
+                <ScalarProperty Name="BankDetails" ColumnName="BankDetails" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Payments">
+            <EntityTypeMapping TypeName="NovotekModel.Payments">
+              <MappingFragment StoreEntitySet="Payments">
+                <ScalarProperty Name="PaymentID" ColumnName="PaymentID" />
+                <ScalarProperty Name="ContractID" ColumnName="ContractID" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Period" ColumnName="Period" />
+                <ScalarProperty Name="PaymentMethod" ColumnName="PaymentMethod" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Realty">
+            <EntityTypeMapping TypeName="NovotekModel.Realty">
+              <MappingFragment StoreEntitySet="Realty">
+                <ScalarProperty Name="RealtyID" ColumnName="RealtyID" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+                <ScalarProperty Name="RealtyTypeID" ColumnName="RealtyTypeID" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="SquareMeters" ColumnName="SquareMeters" />
+                <ScalarProperty Name="Floor" ColumnName="Floor" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsOwned" ColumnName="IsOwned" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RealtyTypes">
+            <EntityTypeMapping TypeName="NovotekModel.RealtyTypes">
+              <MappingFragment StoreEntitySet="RealtyTypes">
+                <ScalarProperty Name="RealtyTypeID" ColumnName="RealtyTypeID" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Role">
+            <EntityTypeMapping TypeName="NovotekModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Descripsion" ColumnName="Descripsion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="NovotekModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tenants">
+            <EntityTypeMapping TypeName="NovotekModel.Tenants">
+              <MappingFragment StoreEntitySet="Tenants">
+                <ScalarProperty Name="TenantID" ColumnName="TenantID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LegalAddress" ColumnName="LegalAddress" />
+                <ScalarProperty Name="INN" ColumnName="INN" />
+                <ScalarProperty Name="DirectorName" ColumnName="DirectorName" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="NovotekModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

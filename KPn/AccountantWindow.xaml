@@ -1,0 +1,24 @@
+﻿<Window x:Class="KPn.AccountantWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KPn"
+        mc:Ignorable="d"
+        Title="Окно бухгалтера" Height="500" Width="700">
+    <Grid Margin="10">
+        <StackPanel>
+            <TextBlock Text="Панель бухгалтера" 
+                       FontSize="18" FontWeight="Bold" Margin="0,0,0,20"/>
+
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                <Button Content="Финансовые отчеты" Width="150" Height="30" Margin="0,0,10,0"/>
+                <Button Content="Налоговые документы" Width="150" Height="30" Margin="0,0,10,0"/>
+                <Button Content="Зарплата" Width="150" Height="30"/>
+            </StackPanel>
+
+            <TextBlock Text="Здесь будет толсволвволыуовилоы    воапыудпПИУСВОЖМ  С ИИСИИВИВИЫИЫИЫ   ООООООООО" 
+                       FontSize="14" TextWrapping="Wrap"/>
+        </StackPanel>
+    </Grid>
+</Window>
