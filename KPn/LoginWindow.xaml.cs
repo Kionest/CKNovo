@@ -47,9 +47,30 @@ namespace KPn
 
                 if (user != null)
                 {
-                    CurrentUser = user;
-                    DialogResult = true;
-                    Close();
+                    if (user.RoleID == 1)
+                    {
+                        AdminPanel windowAdmin = new AdminPanel();
+                        windowAdmin.Show();
+                        this.Close();
+                    }
+                    else if (user.RoleID == 2)
+                    {
+                        ManagerWindow managerWindow = new ManagerWindow();
+                        managerWindow.Show();
+                        this.Close();
+                    }
+                    else if (user.RoleID == 3)
+                    {
+                        AccountantWindow accountantWindow = new AccountantWindow();
+                        accountantWindow.Show();
+                        this.Close();
+                    }
+                    else
+                    {
+                        MainWindow mainWindow = new MainWindow();
+                        mainWindow.Show();
+                        this.Close();
+                    }
                 }
                 else
                 {

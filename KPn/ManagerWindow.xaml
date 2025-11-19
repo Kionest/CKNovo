@@ -5,22 +5,73 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KPn"
         mc:Ignorable="d"
-        Title="Окно менеджера" Height="500" Width="700">
-    <Grid Margin="10">
-        <StackPanel>
-            <TextBlock Text="Панель менеджера по продажам" 
-                       FontSize="18" FontWeight="Bold" Margin="0,0,0,20"/>
+        Title="Панель менеджера" Height="600" Width="900"
+        WindowStartupLocation="CenterScreen">
 
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                <Button Content="Управление чемто" Width="150" Height="30" Margin="0,0,10,0"/>
-                <Button Content="Арендаторы" Width="150" Height="30" Margin="0,0,10,0"/>
-                <Button Content="Отчет по НЕДВИЖКЕ" Width="150" Height="30"/>
-            </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-            <TextBlock Text="Здесь будут чтотофдлтрдлястдфыисловпжлЫВМПЛЫМ
-                       
-                       длфаитмэфаиэлфивоолвуоливуввв тттт    лол ке к " 
-                       FontSize="14" TextWrapping="Wrap"/>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Background="LightGray">
+            <TextBlock Text="Панель менеджера" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+            <TextBlock x:Name="txtUserInfo" Margin="20,0,0,0" VerticalAlignment="Center"/>
+
+            <Button Content="Обновить" Click="BtnRefresh_Click" Margin="20,0,5,0" Padding="10,5"/>
+            <Button Content="Отчеты" Click="BtnReports_Click" Margin="5,0,5,0" Padding="10,5"/>
+            <Button Content="Выход" Click="BtnLogout_Click" Margin="5,0,0,0" Padding="10,5"/>
         </StackPanel>
+
+        <TabControl Grid.Row="1" Margin="5">
+
+            <TabItem Header="Таблицы">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,5">
+                        <TextBlock Text="Таблица:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+
+                        <ComboBox x:Name="cmbTables" Width="200" Height="25" 
+                                 SelectionChanged="CmbTables_SelectionChanged">
+                            <ComboBoxItem Content="Объекты недвижимости" Tag="Realty"/>
+                            <ComboBoxItem Content="Договоры аренды" Tag="Contracts"/>
+                            <ComboBoxItem Content="Арендаторы" Tag="Tenants"/>
+                            <ComboBoxItem Content="Платежи" Tag="Payments"/>
+                            <ComboBoxItem Content="Владельцы" Tag="Owners"/>
+                            <ComboBoxItem Content="Типы недвижимости" Tag="RealtyTypes"/>
+                            <ComboBoxItem Content="Статусы договоров" Tag="ContractStatuses"/>
+                        </ComboBox>
+
+                        <Button Content="Редактировать" Click="BtnEdit_Click" Margin="10,0,5,0" Padding="5"/>
+                        <Button Content="Добавить" Click="BtnAdd_Click" Margin="5,0,5,0" Padding="5"/>
+                        <Button Content="Удалить" Click="BtnDelete_Click" Margin="5,0,0,0" Padding="5"/>
+                    </StackPanel>
+
+                    <DataGrid Grid.Row="1" x:Name="dgData" AutoGenerateColumns="True"
+                             CanUserAddRows="False" CanUserDeleteRows="False"
+                             SelectionMode="Single" SelectionChanged="DgData_SelectionChanged"
+                             CellEditEnding="DgData_CellEditEnding"/>
+                </Grid>
+            </TabItem>
+
+            
+        </TabControl>
+
+        <StatusBar Grid.Row="2">
+            <StatusBarItem>
+                <TextBlock x:Name="txtStatus" Text="Готов"/>
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock x:Name="txtRecordsCount"/>
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock x:Name="txtCurrentTable"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>
