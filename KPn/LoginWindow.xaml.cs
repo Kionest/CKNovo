@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
@@ -28,6 +29,8 @@ namespace KPn
             InitializeComponent();
             _authService = new AuthService();
             txtLogin.Focus();
+
+            InitializeGlowAnimations();
         }
 
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
@@ -93,6 +96,47 @@ namespace KPn
         {
             _authService?.Dispose();
             base.OnClosed(e);
+        }
+
+        private void InitializeGlowAnimations()
+        {
+            Loaded += (s, e) => StartGradientGlowAnimation();
+        }
+
+        private void StartGradientGlowAnimation()
+        {
+            var colorAnimation = new System.Windows.Media.Animation.ColorAnimation
+            {
+                From = Color.FromRgb(0, 120, 212),
+                To = Color.FromRgb(0, 200, 255), 
+                Duration = TimeSpan.FromSeconds(3),
+                AutoReverse = true,
+                RepeatBehavior = System.Windows.Media.Animation.RepeatBehavior.Forever
+            };
+
+            var opacityAnimation = new System.Windows.Media.Animation.DoubleAnimation
+            {
+                From = 0.4,
+                To = 0.8,
+                Duration = TimeSpan.FromSeconds(2),
+                AutoReverse = true,
+                RepeatBehavior = System.Windows.Media.Animation.RepeatBehavior.Forever
+            };
+
+            GlowEffect.BeginAnimation(DropShadowEffect.ColorProperty, colorAnimation);
+            GlowEffect.BeginAnimation(DropShadowEffect.OpacityProperty, opacityAnimation);
+        }
+
+
+        private void TopPanel_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
+        }
+
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
