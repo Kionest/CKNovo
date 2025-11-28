@@ -10,9 +10,7 @@
         AllowsTransparency="True"
         WindowStyle="None"
         Background="Transparent">
-    <Border Background="White" 
-            CornerRadius="5"
-            Margin="20">
+    <Border Background="White" CornerRadius="5" Margin="20">
         <Border.Effect>
             <DropShadowEffect x:Name="GlowEffect" BlurRadius="60"   ShadowDepth="0"  Color="#0078D4"  Opacity="0.7"/>
         </Border.Effect>

@@ -26,6 +26,7 @@ namespace KPn
             InitializeComponent();
             _context = new NovotekEntities();
             LoadData();
+            LoadUserStatistics();
         }
 
         private void LoadData()
@@ -45,6 +46,7 @@ namespace KPn
             }
         }
 
+        #region Работа с пользователями
         private void BtnAddUser_Click(object sender, RoutedEventArgs e)
         {
             var login = txtNewLogin.Text.Trim();
@@ -92,6 +94,8 @@ namespace KPn
             {
                 ShowMessage($"Ошибка при добавлении пользователя: {ex.Message}", isError: true);
             }
+
+            LoadUserStatistics();
         }
 
         private void BtnDeleteUser_Click(object sender, RoutedEventArgs e)
@@ -122,6 +126,34 @@ namespace KPn
                 catch (Exception ex)
                 {
                     ShowMessage($"Ошибка при удалении пользователя: {ex.Message}", isError: true);
+                }
+            }
+        }
+        #endregion
+
+        private void LoadUserStatistics()
+        {
+            using (var db = new NovotekEntities())
+            {
+                var users = db.Users.ToList();
+                var roles = db.Role.ToList();
+                TotalUsersText.Text = users.Count.ToString();
+
+                RolesStatsPanel.Children.Clear();
+
+                foreach (var role in roles)
+                {
+                    int count = users.Count(u => u.RoleID == role.RoleID);
+
+                    TextBlock tb = new TextBlock
+                    {
+                        Text = $"{role.Name}: {count}",
+                        FontSize = 13,
+                        Margin = new Thickness(0, 2, 0, 2),
+                        Foreground = new SolidColorBrush(Colors.Black)
+                    };
+
+                    RolesStatsPanel.Children.Add(tb);
                 }
             }
         }

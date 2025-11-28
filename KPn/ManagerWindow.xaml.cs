@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -21,267 +22,293 @@ namespace KPn
     /// </summary>
     public partial class ManagerWindow : Window
     {
-        private NovotekEntities _context;
-        private string _currentTableName;
+        private NovotekEntities db = new NovotekEntities();
+
+        private Button _currentButton;
+        private List<Tenants> allTenants;
+        private List<Realty> allRealty;
 
         public ManagerWindow()
         {
             InitializeComponent();
-            InitializeManagerPanel();
+            LoadRealty();
+            LoadTenants();
+
+            SetActiveButton(BtnObjects);
+            ShowPanel(ObjectsPanel);
         }
 
-        private void InitializeManagerPanel()
+        #region Недвижимость
+
+        private void LoadRealty()
         {
-            _context = new NovotekEntities();
-            LoadInitialData();
-            UpdateStatus("Панель менеджера загружена");
+            RealtyGrid.ItemsSource = db.Realty.ToList();
+            allRealty = db.Realty.ToList();
+            ApplyRealtyFilter();
+            UpdateRealtyStats();
         }
 
-        private void LoadInitialData()
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (RealtyGrid.SelectedItem is Realty selected)
             {
-                cmbTables.SelectedIndex = 0;
-                LoadTableData("Realty");
+                db.Realty.Remove(selected);
+                db.SaveChanges();
+                LoadRealty();
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}", "Ошибка");
-            }
-        }
-
-
-        private void CmbTables_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (cmbTables.SelectedItem is ComboBoxItem item)
-            {
-                string tableName = item.Tag.ToString();
-                LoadTableData(tableName);
+                MessageBox.Show("Выберите запись для удаления.");
             }
         }
 
-        private void LoadTableData(string tableName)
+        private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                _currentTableName = tableName;
-                txtCurrentTable.Text = GetTableDisplayName(tableName);
+            var win = new RealtyWindow();
+            if (win.ShowDialog() == true)
+                LoadRealty();
+        }
 
-                switch (tableName)
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (RealtyGrid.SelectedItem is Realty selected)
+            {
+                var win = new RealtyWindow(selected);
+                if (win.ShowDialog() == true)
+                    LoadRealty();
+            }
+            else
+            {
+                MessageBox.Show("Выберите запись для редактирования.");
+            }
+        }
+
+        private void UpdateRealtyStats()
+        {
+            if (RealtyGrid.ItemsSource == null) return;
+
+            var list = RealtyGrid.ItemsSource.Cast<Realty>().ToList();
+
+            int total = list.Count;
+            int active = list.Count(r => r.IsActive);
+            int owned = list.Count(r => r.IsOwned);
+
+            double activePercent = total == 0 ? 0 : (active / (double)total * 100);
+            double ownedPercent = total == 0 ? 0 : (owned / (double)total * 100);
+
+            TotalRealtyText.Text = total.ToString();
+            ActiveRealtyText.Text = $"Активные: {active} ({activePercent:F0}%)";
+
+            OwnedRealtyText.Text = owned.ToString();
+            OwnedPercentText.Text = $"Процент собственных: {ownedPercent:F0}%";
+
+            OwnersStatsPanel.Children.Clear();
+
+            var owners = list
+                .GroupBy(r => r.Owners?.FullName ?? "Собственник не указан")
+                .Select(g => new { Owner = g.Key, Count = g.Count() })
+                .OrderByDescending(x => x.Count);
+
+            foreach (var o in owners)
+            {
+                OwnersStatsPanel.Children.Add(new TextBlock
                 {
-                    case "Realty":
-                        _context.Realty
-                            .Include(r => r.RealtyTypes)
-                            .Include(r => r.Owners)
-                            .Load();
-                        dgData.ItemsSource = _context.Realty.Local;
-                        break;
-
-                    case "Contracts":
-                        _context.Contracts
-                            .Include(c => c.Realty)
-                            .Include(c => c.Tenants)
-                            .Include(c => c.ContractStatuses)
-                            .Load();
-                        dgData.ItemsSource = _context.Contracts.Local;
-                        break;
-
-                    case "Tenants":
-                        _context.Tenants.Load();
-                        dgData.ItemsSource = _context.Tenants.Local;
-                        break;
-
-                    case "Payments":
-                        _context.Payments
-                            .Include(p => p.Contracts)
-                            .Load();
-                        dgData.ItemsSource = _context.Payments.Local;
-                        break;
-
-                    case "Owners":
-                        _context.Owners.Load();
-                        dgData.ItemsSource = _context.Owners.Local;
-                        break;
-
-                    case "RealtyTypes":
-                        _context.RealtyTypes.Load();
-                        dgData.ItemsSource = _context.RealtyTypes.Local;
-                        break;
-
-                    case "ContractStatuses":
-                        _context.ContractStatuses.Load();
-                        dgData.ItemsSource = _context.ContractStatuses.Local;
-                        break;
-                }
-
-                UpdateRecordsCount();
-                UpdateStatus($"Загружена таблица: {GetTableDisplayName(tableName)}");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка загрузки таблицы: {ex.Message}", "Ошибка");
+                    Text = $"{o.Owner}: {o.Count}",
+                    FontSize = 16,
+                    Margin = new Thickness(0, 3, 0, 3),
+                    Foreground = new SolidColorBrush(Color.FromRgb(50, 50, 50))
+                });
             }
         }
 
-        private string GetTableDisplayName(string tableName)
+        private void RealtyFilters_Changed(object sender, EventArgs e)
         {
-            switch (tableName)
-            {
-                case "Realty": return "Объекты недвижимости";
-                case "Contracts": return "Договоры аренды";
-                case "Tenants": return "Арендаторы";
-                case "Payments": return "Платежи";
-                case "Owners": return "Владельцы";
-                case "RealtyTypes": return "Типы недвижимости";
-                case "ContractStatuses": return "Статусы договоров";
-                default: return tableName;
-            }
+            ApplyRealtyFilter();
         }
 
-
-        private void BtnEdit_Click(object sender, RoutedEventArgs e)
+        private void ApplyRealtyFilter()
         {
-            if (dgData.SelectedItem == null)
+            if (allRealty == null) return;
+
+            string search = RealtySearchBox.Text?.ToLower() ?? "";
+            string status = (StatusFilter.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+            var filtered = allRealty.Where(r => (string.IsNullOrWhiteSpace(search) || (r.Address != null && r.Address.ToLower().Contains(search)))).ToList();
+
+            switch (status)
             {
-                MessageBox.Show("Выберите запись для редактирования");
+                case "Активные":
+                    filtered = filtered.Where(r => r.IsActive).ToList();
+                    break;
+
+                case "Неактивные":
+                    filtered = filtered.Where(r => !r.IsActive).ToList();
+                    break;
+
+                case "Собственные":
+                    filtered = filtered.Where(r => r.IsOwned).ToList();
+                    break;
+
+                case "Несобственные":
+                    filtered = filtered.Where(r => !r.IsOwned).ToList();
+                    break;
+            }
+
+            RealtyGrid.ItemsSource = filtered;
+        }
+
+        #endregion
+
+
+        #region Клиенты
+        private void LoadTenants()
+        {
+            allTenants = db.Tenants.ToList();
+            TenantsGrid.ItemsSource = db.Tenants.ToList();
+            UpdateTenantStats();
+        }
+
+        private void UpdateTenantStats()
+        {
+            if (allTenants == null || allTenants.Count == 0)
+            {
+                TotalClientsText.Text = "0";
+                CompanyClientsText.Text = "0";
+                IndividualClientsText.Text = "0";
+                CompanyPercentText.Text = "0% от общего числа";
+                IndividualPercentText.Text = "0% от общего числа";
                 return;
             }
 
-            dgData.IsReadOnly = false;
-            UpdateStatus("Режим редактирования включен");
+            int total = allTenants.Count;
+            int companies = allTenants.Count(t => t.INN != null && t.INN.Length == 10);
+            int ip = allTenants.Count(t => t.INN != null && t.INN.Length == 12);
+            ip += allTenants.Count(t => string.IsNullOrWhiteSpace(t.INN));
+
+            TotalClientsText.Text = total.ToString();
+            CompanyClientsText.Text = companies.ToString();
+            IndividualClientsText.Text = ip.ToString();
+
+            int companyPercent = companies * 100 / total;
+            int ipPercent = ip * 100 / total;
+
+            CompanyPercentText.Text = $"{companyPercent}% от общего числа";
+            IndividualPercentText.Text = $"{ipPercent}% от общего числа";
         }
 
-        private void BtnAdd_Click(object sender, RoutedEventArgs e)
+        private void AddTenantButton_Click(object sender, RoutedEventArgs e)
         {
-            try
+            TenantAddWindow win = new TenantAddWindow();
+
+            if (win.ShowDialog() == true)
             {
-                switch (_currentTableName)
+                using (var db = new NovotekEntities())
                 {
-                    case "Realty":
-                        _context.Realty.Add(new Realty { IsActive = true });
-                        break;
-                    case "Contracts":
-                        _context.Contracts.Add(new Contracts { ContractStatusID = 1 });
-                        break;
-                    case "Tenants":
-                        _context.Tenants.Add(new Tenants());
-                        break;
-                    case "Payments":
-                        _context.Payments.Add(new Payments { PaymentDate = DateTime.Now });
-                        break;
-                    case "Owners":
-                        _context.Owners.Add(new Owners());
-                        break;
-                    case "RealtyTypes":
-                        _context.RealtyTypes.Add(new RealtyTypes());
-                        break;
-                    case "ContractStatuses":
-                        _context.ContractStatuses.Add(new ContractStatuses());
-                        break;
+                    db.Tenants.Add(win.NewTenant);
+                    db.SaveChanges();
                 }
 
-                _context.SaveChanges();
-                LoadTableData(_currentTableName);
-                UpdateStatus("Новая запись добавлена");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка добавления: {ex.Message}", "Ошибка");
+                LoadTenants();
             }
         }
 
-        private void BtnDelete_Click(object sender, RoutedEventArgs e)
+        private void DeleteTenantButton_Click(object sender, RoutedEventArgs e)
         {
-            if (dgData.SelectedItem == null)
+            var selected = TenantsGrid.SelectedItem as Tenants;
+
+            if (selected == null)
             {
-                MessageBox.Show("Выберите запись для удаления");
+                MessageBox.Show("Выберите клиента.");
                 return;
             }
 
-            var result = MessageBox.Show("Удалить выбранную запись?", "Подтверждение",
-                                       MessageBoxButton.YesNo);
+            using (var db = new NovotekEntities())
+            {
+                var tenant = db.Tenants.Find(selected.TenantID);
 
+                db.Tenants.Remove(tenant);
+                db.SaveChanges();
+            }
+
+            LoadTenants();
+        }
+
+        private void TenantSearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string text = TenantSearchBox.Text.ToLower();
+
+            var filtered = allTenants
+                .Where(t =>
+                    (t.FullName != null && t.FullName.ToLower().Contains(text)) ||
+                    (t.PhoneNumber != null && t.PhoneNumber.ToLower().Contains(text)) ||
+                    (t.Email != null && t.Email.ToLower().Contains(text)) ||
+                    (t.INN != null && t.INN.ToLower().Contains(text)) ||
+                    (t.DirectorName != null && t.DirectorName.ToLower().Contains(text))
+                )
+                .ToList();
+
+            TenantsGrid.ItemsSource = filtered;
+        }
+        #endregion
+
+
+        #region Методы для работы окна
+        private void MenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+            {
+                SetActiveButton(button);
+
+                switch (button.Tag.ToString())
+                {
+                    case "0":
+                        ShowPanel(ObjectsPanel);
+                        break;
+                    case "1":
+                        ShowPanel(ClientsPanel);
+                        break;
+                    case "2":
+                        ShowPanel(ContractsPanel);
+                        break;
+                    case "3":
+                        ShowPanel(MapPanel);
+                        break;
+                }
+            }
+        }
+
+        private void SetActiveButton(Button activeButton)
+        {
+            if (_currentButton != null)
+            {
+                _currentButton.ClearValue(Button.BackgroundProperty);
+                _currentButton.ClearValue(Button.ForegroundProperty);
+            }
+
+            activeButton.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#173F5F");
+            activeButton.Foreground = Brushes.White;
+            _currentButton = activeButton;
+        }
+
+        private void ShowPanel(StackPanel panelToShow)
+        {
+            ObjectsPanel.Visibility = Visibility.Collapsed;
+            ClientsPanel.Visibility = Visibility.Collapsed;
+            ContractsPanel.Visibility = Visibility.Collapsed;
+            MapPanel.Visibility = Visibility.Collapsed;
+            panelToShow.Visibility = Visibility.Visible;
+        }
+
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Вы действительно хотите выйти?", "Выход", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
-                try
-                {
-                    var item = dgData.SelectedItem;
-                    _context.Entry(item).State = EntityState.Deleted;
-                    _context.SaveChanges();
-
-                    LoadTableData(_currentTableName);
-                    UpdateStatus("Запись удалена");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ошибка удаления: {ex.Message}", "Ошибка");
-                }
-            }
-        }
-
-        private void BtnRefresh_Click(object sender, RoutedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(_currentTableName))
-            {
-                LoadTableData(_currentTableName);
-                UpdateStatus("Данные обновлены");
-            }
-        }
-
-        private void BtnReports_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Раздел отчетов в разработке");
-        }
-      
-
-        private void DgData_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            
-        }
-
-        private void DgData_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-        {
-            try
-            {
-                _context.SaveChanges();
-                UpdateStatus("Изменения сохранены");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка сохранения: {ex.Message}", "Ошибка");
-            }
-        }
-
-
-
-        private void UpdateStatus(string message)
-        {
-            txtStatus.Text = message;
-        }
-
-        private void UpdateRecordsCount()
-        {
-            int count = dgData.Items.Count;
-            txtRecordsCount.Text = $"Записей: {count}";
-        }
-
-        private void BtnLogout_Click(object sender, RoutedEventArgs e)
-        {
-            var result = MessageBox.Show("Выйти из системы?", "Выход", MessageBoxButton.YesNo);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                var loginWindow = new LoginWindow();
-                loginWindow.Show();
                 this.Close();
             }
         }
 
-        protected override void OnClosed(EventArgs e)
-        {
-            _context?.Dispose();
-            base.OnClosed(e);
-        }
-
+        #endregion
     }
 }
+

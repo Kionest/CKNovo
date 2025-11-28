@@ -33,6 +33,7 @@ namespace KPn
             InitializeGlowAnimations();
         }
 
+        #region Функционирование входа
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
             var login = txtLogin.Text.Trim();
@@ -92,12 +93,21 @@ namespace KPn
             txtError.Visibility = Visibility.Visible;
         }
 
-        protected override void OnClosed(EventArgs e)
+        private void TopPanel_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            _authService?.Dispose();
-            base.OnClosed(e);
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
         }
 
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        #endregion
+
+
+        #region Градиент
         private void InitializeGlowAnimations()
         {
             Loaded += (s, e) => StartGradientGlowAnimation();
@@ -127,16 +137,7 @@ namespace KPn
             GlowEffect.BeginAnimation(DropShadowEffect.OpacityProperty, opacityAnimation);
         }
 
+        #endregion
 
-        private void TopPanel_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-                this.DragMove();
-        }
-
-        private void BtnClose_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
     }
 }

@@ -5,73 +5,196 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KPn"
         mc:Ignorable="d"
-        Title="Панель менеджера" Height="600" Width="900"
-        WindowStartupLocation="CenterScreen">
+        Height="700" Width="1000">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="39.3"/>
+            <ColumnDefinition Width="16.8"/>
+            <ColumnDefinition Width="163.9"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Background="LightGray">
-            <TextBlock Text="Панель менеджера" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
-            <TextBlock x:Name="txtUserInfo" Margin="20,0,0,0" VerticalAlignment="Center"/>
+        <StackPanel Grid.Column="0" Background="#F0F0F0" Grid.ColumnSpan="3">
 
-            <Button Content="Обновить" Click="BtnRefresh_Click" Margin="20,0,5,0" Padding="10,5"/>
-            <Button Content="Отчеты" Click="BtnReports_Click" Margin="5,0,5,0" Padding="10,5"/>
-            <Button Content="Выход" Click="BtnLogout_Click" Margin="5,0,0,0" Padding="10,5"/>
+            <Label Content="CKNova" FontSize="18" FontWeight="Bold"/>
+
+            <Canvas Margin="10,20,10,500">
+                <Button x:Name="BtnObjects" Content="🏢 Объекты" Click="MenuButton_Click" Tag="0" Canvas.Left="41" Canvas.Top="17"/>
+                <Button x:Name="BtnClients" Content="👥 Клиенты" Click="MenuButton_Click" Tag="1" Canvas.Left="22" Canvas.Top="62"/>
+                <Button x:Name="BtnContracts" Content="📄 Договоры" Click="MenuButton_Click" Tag="2" Canvas.Left="19" Canvas.Top="99"/>
+                <Button x:Name="BtnMap" Content="🗺️ Карта" Click="MenuButton_Click" Tag="3" Canvas.Left="26" Canvas.Top="144"/>
+                <Button Content="🚪 Выйти" Click="ExitButton_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Canvas.Left="5" Canvas.Top="577"/>
+            </Canvas>
         </StackPanel>
 
-        <TabControl Grid.Row="1" Margin="5">
+        <Grid Grid.Column="3" Margin="15,15,15,15">
 
-            <TabItem Header="Таблицы">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+            <!-- Объекты -->
+            <StackPanel x:Name="ObjectsPanel" Visibility="Visible">
 
-                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,5">
-                        <TextBlock Text="Таблица:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <TextBlock Text="🏢 Управление объектами"  FontSize="24" FontWeight="Bold" Margin="20,10,20,20"/>
 
-                        <ComboBox x:Name="cmbTables" Width="200" Height="25" 
-                                 SelectionChanged="CmbTables_SelectionChanged">
-                            <ComboBoxItem Content="Объекты недвижимости" Tag="Realty"/>
-                            <ComboBoxItem Content="Договоры аренды" Tag="Contracts"/>
-                            <ComboBoxItem Content="Арендаторы" Tag="Tenants"/>
-                            <ComboBoxItem Content="Платежи" Tag="Payments"/>
-                            <ComboBoxItem Content="Владельцы" Tag="Owners"/>
-                            <ComboBoxItem Content="Типы недвижимости" Tag="RealtyTypes"/>
-                            <ComboBoxItem Content="Статусы договоров" Tag="ContractStatuses"/>
-                        </ComboBox>
+                <StackPanel Orientation="Horizontal" Margin="20,0,20,20">
+                    <Button Content="➕ Добавить объект" Style="{StaticResource ActionButtonStyle}" Width="150" Click="AddButton_Click"/>
+                    <Button Content="✏️ Редактировать" Style="{StaticResource ActionButtonStyle}" Width="134" Click="EditButton_Click"/>
+                    <Button Content="🗑️ Удалить" Style="{StaticResource ActionButtonStyle}" Width="100" RenderTransformOrigin="0.5,0.5" Click="DeleteButton_Click"/>
+                </StackPanel>
 
-                        <Button Content="Редактировать" Click="BtnEdit_Click" Margin="10,0,5,0" Padding="5"/>
-                        <Button Content="Добавить" Click="BtnAdd_Click" Margin="5,0,5,0" Padding="5"/>
-                        <Button Content="Удалить" Click="BtnDelete_Click" Margin="5,0,0,0" Padding="5"/>
-                    </StackPanel>
+                <Grid Margin="20,10,20,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                    <DataGrid Grid.Row="1" x:Name="dgData" AutoGenerateColumns="True"
-                             CanUserAddRows="False" CanUserDeleteRows="False"
-                             SelectionMode="Single" SelectionChanged="DgData_SelectionChanged"
-                             CellEditEnding="DgData_CellEditEnding"/>
+                    <Border Grid.Column="0" Background="White" CornerRadius="15" Padding="15" Margin="8" BorderBrush="#D0D0D0" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Всего объектов" FontSize="14" Foreground="#555"/>
+                            <TextBlock x:Name="TotalRealtyText" Text="0" FontSize="30" FontWeight="Bold" Margin="0,5,0,0"/>
+                            <TextBlock x:Name="ActiveRealtyText" Text="Активные: 0 (0%)" FontSize="12" Foreground="#2A6FDB"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="1" Background="White" CornerRadius="15" Padding="15" Margin="8" BorderBrush="#D0D0D0" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Собственные объекты" FontSize="14" Foreground="#555"/>
+                            <TextBlock x:Name="OwnedRealtyText" Text="0" FontSize="30" FontWeight="Bold" Margin="0,5,0,0"/>
+                            <TextBlock x:Name="OwnedPercentText" Text="Процент собственных: 0%" FontSize="12" Foreground="Green"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="2" Background="White" CornerRadius="15" Padding="15" Margin="8" BorderBrush="#D0D0D0" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Объекты по собственникам" FontSize="14" Foreground="#555"/>
+                            <StackPanel x:Name="OwnersStatsPanel" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+
                 </Grid>
-            </TabItem>
 
-            
-        </TabControl>
+                <StackPanel Margin="20,0,20,10">
 
-        <StatusBar Grid.Row="2">
-            <StatusBarItem>
-                <TextBlock x:Name="txtStatus" Text="Готов"/>
-            </StatusBarItem>
-            <StatusBarItem>
-                <TextBlock x:Name="txtRecordsCount"/>
-            </StatusBarItem>
-            <StatusBarItem>
-                <TextBlock x:Name="txtCurrentTable"/>
-            </StatusBarItem>
-        </StatusBar>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0" VerticalAlignment="Center">
+
+                        <StackPanel>
+                            <TextBlock Text="Поиск по адресу" FontSize="12" Margin="0,0,0,3"/>
+                            <TextBox x:Name="RealtySearchBox" Width="533" Height="45" Margin="0,0,20,0" TextChanged="RealtyFilters_Changed"/>
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock Text="Статус" FontSize="12" Margin="0,0,0,3"/>
+                            <ComboBox x:Name="StatusFilter" Width="150" Height="32" SelectionChanged="RealtyFilters_Changed">
+                                <ComboBoxItem Content="Все" IsSelected="True"/>
+                                <ComboBoxItem Content="Активные"/>
+                                <ComboBoxItem Content="Неактивные"/>
+                                <ComboBoxItem Content="Собственные"/>
+                                <ComboBoxItem Content="Несобственные"/>
+                            </ComboBox>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <DataGrid x:Name="RealtyGrid" Margin="20" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding RealtyID}" Width="60"/>
+                        <DataGridTextColumn Header="Адрес" Binding="{Binding Address}" Width="200"/>
+                        <DataGridTextColumn Header="Площадь" Binding="{Binding SquareMeters}" Width="100"/>
+                        <DataGridTextColumn Header="Этаж" Binding="{Binding Floor}" Width="80"/>
+                        <DataGridCheckBoxColumn Header="Собств." Binding="{Binding IsOwned}" Width="80"/>
+                        <DataGridCheckBoxColumn Header="Активен" Binding="{Binding IsActive}" Width="80"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+
+            <!-- Клиенты -->
+            <StackPanel x:Name="ClientsPanel" Visibility="Collapsed">
+                <TextBlock Text="👥 Управление клиентами" FontSize="24" FontWeight="Bold" Margin="20,10,20,20"/>
+
+                <StackPanel Orientation="Horizontal" Margin="20,0,20,20">
+                    <Button Content="➕ Добавить клиента" Style="{StaticResource ActionButtonStyle}" Click="AddTenantButton_Click" Width="150"/>
+                    <Button Content="📞 Контакты" Style="{StaticResource ActionButtonStyle}" Click="DeleteTenantButton_Click" Width="150"/>
+                    <Button Content="📧 Рассылка" Style="{StaticResource ActionButtonStyle}"  Width="150"/>
+                </StackPanel>
+
+                <Grid Margin="20,10,20,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Background="White" CornerRadius="15" Padding="15" Margin="8" BorderBrush="#D0D0D0" BorderThickness="1" >
+                        <StackPanel>
+                            <TextBlock Text="Всего клиентов" FontSize="14" Foreground="#555"/>
+                            <TextBlock x:Name="TotalClientsText" Text="0" FontSize="30" FontWeight="Bold" Margin="0,5,0,0"/>
+                            <TextBlock Text="Активные арендаторы" FontSize="12" Foreground="#2A6FDB"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="1" Background="White" CornerRadius="15" Padding="15" Margin="8" BorderBrush="#D0D0D0" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Юр. лица" FontSize="14" Foreground="#555"/>
+                            <TextBlock x:Name="CompanyClientsText" Text="0" FontSize="30" FontWeight="Bold" Margin="0,5,0,0"/>
+                            <TextBlock x:Name="CompanyPercentText" Text="0% от общего числа" FontSize="12" Foreground="Green"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="2" Background="White" CornerRadius="15" Padding="15" Margin="8" BorderBrush="#D0D0D0" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="ИП и физ. лица" FontSize="14" Foreground="#555"/>
+                            <TextBlock x:Name="IndividualClientsText" Text="0" FontSize="30" FontWeight="Bold" Margin="0,5,0,0"/>
+                            <TextBlock x:Name="IndividualPercentText" Text="0% от общего числа" FontSize="12" Foreground="Purple"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <StackPanel Margin="20,10,20,10">
+                    <TextBlock Text="Поиск"/>
+                    <TextBox x:Name="TenantSearchBox" Height="44" TextChanged="TenantSearchBox_TextChanged"/>
+                </StackPanel>
+
+                <DataGrid x:Name="TenantsGrid" Margin="10" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding TenantID}" Width="60"/>
+                        <DataGridTextColumn Header="Название / ФИО" Binding="{Binding FullName}" Width="200"/>
+                        <DataGridTextColumn Header="Телефон" Binding="{Binding PhoneNumber}" Width="120"/>
+                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="200"/>
+                        <DataGridTextColumn Header="Юр. адрес" Binding="{Binding LegalAddress}" Width="250"/>
+                        <DataGridTextColumn Header="ИНН" Binding="{Binding INN}" Width="120"/>
+                        <DataGridTextColumn Header="Директор" Binding="{Binding DirectorName}" Width="200"/>
+                        <DataGridTextColumn Header="Заметки" Binding="{Binding Notes}" Width="200"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+
+            <!-- Договоры -->
+            <StackPanel x:Name="ContractsPanel" Visibility="Collapsed">
+                <TextBlock Text="📄 Управление договорами" FontSize="24" FontWeight="Bold"  Margin="20,10,20,20"/>
+
+                <StackPanel Orientation="Horizontal" Margin="20,0,20,20">
+                    <Button Content="📝 Новый договор"  Width="150"/>
+                    <Button Content="⏰ Сроки действий"  Width="150"/>
+                    <Button Content="💳 Платежи"  Width="150"/>
+                </StackPanel>
+
+                <Border>
+                    <TextBlock Text="Архив договоров аренды&#10;&#10;• Активные договоры&#10;• Завершенные договоры&#10;• Продлеваемые договоры&#10;• Договоры с истекающим сроком" 
+                              />
+                </Border>
+            </StackPanel>
+
+            <!-- Карта -->
+            <StackPanel x:Name="MapPanel" Visibility="Collapsed">
+                <TextBlock Text="🗺️ Карта объектов"  FontSize="24" FontWeight="Bold"  Margin="20,10,20,20"/>
+
+                <StackPanel Orientation="Horizontal" Margin="20,0,20,20">
+                    <Button Content="📍 Все объекты" Style="{StaticResource ActionButtonStyle}"  Width="150"/>
+                    <Button Content="⭐ Избранные" Style="{StaticResource ActionButtonStyle}"  Width="150"/>
+                    <Button Content="🔍 Поиск на карте" Style="{StaticResource ActionButtonStyle}" />
+                </StackPanel>
+            </StackPanel>
+
+        </Grid>
     </Grid>
 </Window>
