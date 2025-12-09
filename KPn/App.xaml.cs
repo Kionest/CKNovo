@@ -13,5 +13,9 @@ namespace KPn
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerAndCache;
+        }
     }
 }

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KPn"
+        
         mc:Ignorable="d"
         Height="700" Width="1000">
 
@@ -31,7 +32,7 @@
         <Grid Grid.Column="3" Margin="15,15,15,15">
 
             <!-- Объекты -->
-            <StackPanel x:Name="ObjectsPanel" Visibility="Visible">
+            <StackPanel x:Name="ObjectsPanel" Visibility="Collapsed">
 
                 <TextBlock Text="🏢 Управление объектами"  FontSize="24" FontWeight="Bold" Margin="20,10,20,20"/>
 
@@ -170,29 +171,83 @@
 
             <!-- Договоры -->
             <StackPanel x:Name="ContractsPanel" Visibility="Collapsed">
-                <TextBlock Text="📄 Управление договорами" FontSize="24" FontWeight="Bold"  Margin="20,10,20,20"/>
+                <TextBlock Text="📄 Управление договорами" FontSize="24" FontWeight="Bold" Margin="20,10,20,20"/>
 
                 <StackPanel Orientation="Horizontal" Margin="20,0,20,20">
-                    <Button Content="📝 Новый договор"  Width="150"/>
-                    <Button Content="⏰ Сроки действий"  Width="150"/>
-                    <Button Content="💳 Платежи"  Width="150"/>
+                    <Button Content="📝 Новый договор" Width="150" Click="AddContract_Click"/>
+                    <Button Content="✏️ Редактировать" Width="150" Click="EditContract_Click" />
+                    <Button Content="🗑️ Удалить" Width="150" Click="DeleteContract_Click" />
                 </StackPanel>
 
-                <Border>
-                    <TextBlock Text="Архив договоров аренды&#10;&#10;• Активные договоры&#10;• Завершенные договоры&#10;• Продлеваемые договоры&#10;• Договоры с истекающим сроком" 
-                              />
-                </Border>
+                <Grid Margin="20,10,20,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Background="White" CornerRadius="15" Padding="15" Margin="8" BorderBrush="#D0D0D0" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Всего договоров" FontSize="14" Foreground="#555"/>
+                            <TextBlock x:Name="TotalContractsText" Text="0" FontSize="30" FontWeight="Bold" Margin="0,5,0,0"/>
+                            <TextBlock x:Name="ActiveContractsText" Text="Активные: 0 (0%)" FontSize="12" Foreground="#2A6FDB"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="1" Background="White" CornerRadius="15" Padding="15" Margin="8" BorderBrush="#D0D0D0" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Договоры по статусам" FontSize="14" Foreground="#555"/>
+                            <StackPanel x:Name="ContractStatusesPanel" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="2" Background="White" CornerRadius="15" Padding="15" Margin="8" BorderBrush="#D0D0D0" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Истекающие в 30 дней" FontSize="14" Foreground="#555"/>
+                            <TextBlock x:Name="ExpiringContractsText" FontSize="30" FontWeight="Bold" Margin="0,5,0,0"/>
+                            <TextBlock Text="Договоров истекает в ближайший месяц" FontSize="12" Foreground="Orange"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <StackPanel Margin="20,0,20,10">
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0" VerticalAlignment="Center">
+                        <StackPanel>
+                            <TextBlock Text="Поиск по номеру / объекту / клиенту" FontSize="12" Margin="0,0,0,3"/>
+                            <TextBox x:Name="ContractsSearchBox" Width="500" Height="40" TextChanged="ContractsFilters_Changed"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="20,0,0,0">
+                            <TextBlock Text="Статус" FontSize="12" Margin="0,0,0,3"/>
+                            <ComboBox x:Name="ContractStatusFilter" Width="180" Height="32" SelectionChanged="ContractsFilters_Changed">
+                                <ComboBoxItem Content="Все" IsSelected="True"/>
+                                <ComboBoxItem Content="Активные"/>
+                                <ComboBoxItem Content="Завершённые"/>
+                                <ComboBoxItem Content="Истекают скоро"/>
+                            </ComboBox>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <DataGrid x:Name="ContractsGrid" Margin="20" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding ContractID}" Width="60"/>
+                        <DataGridTextColumn Header="№" Binding="{Binding ContractNumber}" Width="100"/>
+                        <DataGridTextColumn Header="Объект" Binding="{Binding Realty.Address}" Width="220"/>
+                        <DataGridTextColumn Header="Арендатор" Binding="{Binding Tenants.FullName}" Width="220"/>
+                        <DataGridTextColumn Header="Начало" Binding="{Binding StartDate, StringFormat=d}" Width="120"/>
+                        <DataGridTextColumn Header="Окончание" Binding="{Binding EndDate, StringFormat=d}" Width="120"/>
+                        <DataGridTextColumn Header="Аренда ₽" Binding="{Binding MonthlyRent}" Width="120"/>
+                        <DataGridTextColumn Header="Депозит ₽" Binding="{Binding Deposit}" Width="120"/>
+                        <DataGridTextColumn Header="Статус" Binding="{Binding ContractStatuses.StatusName}" Width="140"/>
+                    </DataGrid.Columns>
+                </DataGrid>
             </StackPanel>
 
             <!-- Карта -->
-            <StackPanel x:Name="MapPanel" Visibility="Collapsed">
-                <TextBlock Text="🗺️ Карта объектов"  FontSize="24" FontWeight="Bold"  Margin="20,10,20,20"/>
-
-                <StackPanel Orientation="Horizontal" Margin="20,0,20,20">
-                    <Button Content="📍 Все объекты" Style="{StaticResource ActionButtonStyle}"  Width="150"/>
-                    <Button Content="⭐ Избранные" Style="{StaticResource ActionButtonStyle}"  Width="150"/>
-                    <Button Content="🔍 Поиск на карте" Style="{StaticResource ActionButtonStyle}" />
-                </StackPanel>
+            <StackPanel x:Name="MapPanel" Visibility="Visible">
+                <TextBlock Text="🗺️ Карта объектов" FontSize="24" FontWeight="Bold" Margin="20,10,20,20"/>
+                
             </StackPanel>
 
         </Grid>

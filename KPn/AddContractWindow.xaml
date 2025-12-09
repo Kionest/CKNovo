@@ -1,0 +1,48 @@
+﻿<Window x:Class="KPn.AddContractWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KPn"
+        mc:Ignorable="d"
+         Title="Новый договор" Height="520" Width="600"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="Добавление договора" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
+            <TextBlock Text="Номер договора"/>
+            <TextBox x:Name="NumBox" Height="30"/>
+            <TextBlock Text="Объект" Margin="0,10,0,0"/>
+            <ComboBox x:Name="RealtyBox" Height="30"/>
+
+            <TextBlock Text="Арендатор" Margin="0,10,0,0"/>
+            <ComboBox x:Name="TenantBox" Height="30"/>
+
+            <TextBlock Text="Статус" Margin="0,10,0,0"/>
+            <ComboBox x:Name="StatusBox" Height="30"/>
+
+            <TextBlock Text="Дата начала" Margin="0,10,0,0"/>
+            <DatePicker x:Name="StartDatePicker" Height="30"/>
+
+            <TextBlock Text="Дата окончания" Margin="0,10,0,0"/>
+            <DatePicker x:Name="EndDatePicker" Height="30"/>
+
+            <TextBlock Text="Арендная плата (₽)" Margin="0,10,0,0"/>
+            <TextBox x:Name="RentBox" Height="30"/>
+
+            <TextBlock Text="Депозит (₽)" Margin="0,10,0,0"/>
+            <TextBox x:Name="DepositBox" Height="30"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="Отмена" Width="120" Margin="0,0,10,0" Click="Cancel_Click"/>
+            <Button Content="Создать" Width="150" Foreground="White" Click="Create_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

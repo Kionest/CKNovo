@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="dbfc361a1b0e4406a03a6116654bd09c" Name="Diagram1" ZoomLevel="65">
+      <Diagram DiagramId="dbfc361a1b0e4406a03a6116654bd09c" Name="Diagram1" ZoomLevel="94">
         <EntityTypeShape EntityType="NovotekModel.Contracts" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="NovotekModel.ContractStatuses" Width="1.5" PointX="3" PointY="6.25" IsExpanded="true" />
         <EntityTypeShape EntityType="NovotekModel.Owners" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />

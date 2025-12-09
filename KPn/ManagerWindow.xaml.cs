@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,15 +28,18 @@ namespace KPn
         private Button _currentButton;
         private List<Tenants> allTenants;
         private List<Realty> allRealty;
+        private List<Contracts> allContracts;
 
         public ManagerWindow()
         {
             InitializeComponent();
             LoadRealty();
             LoadTenants();
+            LoadContracts();
 
             SetActiveButton(BtnObjects);
             ShowPanel(ObjectsPanel);
+            LoadContractsStats();
         }
 
         #region Недвижимость
@@ -159,7 +163,6 @@ namespace KPn
 
         #endregion
 
-
         #region Клиенты
         private void LoadTenants()
         {
@@ -251,6 +254,139 @@ namespace KPn
         }
         #endregion
 
+        #region Договоры
+
+        private void LoadContracts()
+        {
+            using (var db = new NovotekEntities())
+            {
+                allContracts = db.Contracts
+                    .Include("Realty")
+                    .Include("Tenants")
+                    .Include("ContractStatuses")
+                .ToList();
+            }
+
+            ContractsGrid.ItemsSource = allContracts;
+        }
+
+        private void ContractsFilters_Changed(object sender, EventArgs e)
+        {
+            if (allContracts == null) return;
+
+            string text = ContractsSearchBox.Text.ToLower();
+            var statusFilter = (ContractStatusFilter.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+            var filtered = allContracts.Where(c =>
+                (string.IsNullOrEmpty(text) ||
+                 (c.ContractNumber?.ToLower().Contains(text) ?? false) ||
+                 (c.Realty?.Address?.ToLower().Contains(text) ?? false) ||
+                 (c.Tenants?.FullName?.ToLower().Contains(text) ?? false))
+            ).ToList();
+
+            if (statusFilter == "Активные")
+            {
+                filtered = filtered.Where(c => c.EndDate > DateTime.Now).ToList();
+            }
+            else if (statusFilter == "Завершённые")
+            {
+                filtered = filtered.Where(c => c.EndDate <= DateTime.Now).ToList();
+            }
+            else if (statusFilter == "Истекают скоро")
+            {
+                filtered = filtered.Where(c =>
+                    c.EndDate > DateTime.Now &&
+                    (c.EndDate - DateTime.Now).TotalDays <= 30
+                ).ToList();
+            }
+
+            ContractsGrid.ItemsSource = filtered;
+        }
+
+        private void AddContract_Click(object sender, RoutedEventArgs e)
+        {
+            var form = new AddContractWindow();
+            if (form.ShowDialog() == true)
+            {
+                LoadContracts();
+            }
+        }
+
+        private void DeleteContract_Click(object sender, RoutedEventArgs e)
+        {
+            if (ContractsGrid.SelectedItem is Contracts selected)
+            {
+                if (MessageBox.Show("Удалить договор?", "Подтверждение",
+                    MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    using (var db = new NovotekEntities())
+                    {
+                        var c = db.Contracts.Find(selected.ContractID);
+                        db.Contracts.Remove(c);
+                        db.SaveChanges();
+                    }
+                    LoadContracts();
+                }
+            }
+        }
+
+        private void EditContract_Click(object sender, RoutedEventArgs e)
+        {
+            if (ContractsGrid.SelectedItem is Contracts selected)
+            {
+                var win = new EditContractWindow(selected.ContractID);
+                win.ShowDialog();
+
+                LoadContracts();
+            }
+            else
+            {
+                MessageBox.Show("Выберите договор для редактирования.");
+            }
+        }
+
+        private void LoadContractsStats()
+        {
+            using (var db = new NovotekEntities())
+            {
+                var contracts = db.Contracts
+                    .Include(c => c.ContractStatuses)
+                    .ToList();
+
+                int total = contracts.Count;
+                int active = contracts.Count(c => c.ContractStatuses.StatusName == "Активный");
+
+                TotalContractsText.Text = total.ToString();
+
+                double percent = total > 0 ? (active * 100.0 / total) : 0;
+                ActiveContractsText.Text = $"Активные: {active} ({percent:F1}%)";
+
+                ContractStatusesPanel.Children.Clear();
+                var grouped = contracts
+                    .GroupBy(c => c.ContractStatuses.StatusName)
+                    .Select(g => new { Status = g.Key, Count = g.Count() });
+
+                foreach (var item in grouped)
+                {
+                    ContractStatusesPanel.Children.Add(
+                        new TextBlock
+                        {
+                            Text = $"{item.Status}: {item.Count}",
+                            FontSize = 12,
+                            Margin = new Thickness(0, 2, 0, 0)
+                        });
+                }
+
+                DateTime now = DateTime.Now;
+                DateTime until = now.AddDays(30);
+
+                int expiring = contracts.Count(c => c.EndDate <= until && c.EndDate >= now);
+
+                ExpiringContractsText.Text = expiring.ToString();
+            }
+        }
+
+        #endregion
 
         #region Методы для работы окна
         private void MenuButton_Click(object sender, RoutedEventArgs e)
