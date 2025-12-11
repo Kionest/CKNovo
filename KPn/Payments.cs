@@ -18,7 +18,6 @@ namespace KPn
         public int ContractID { get; set; }
         public System.DateTime PaymentDate { get; set; }
         public decimal Amount { get; set; }
-        public System.DateTime Period { get; set; }
         public string PaymentMethod { get; set; }
     
         public virtual Contracts Contracts { get; set; }

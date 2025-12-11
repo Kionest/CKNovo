@@ -1,0 +1,52 @@
+﻿<Window x:Class="KPn.RealtyEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KPn"
+        mc:Ignorable="d"
+        Title="Редактировать объект"
+        Height="620" Width="520"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+    <Grid Background="#F4F4F4" Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Редактирование объекта" FontSize="22" FontWeight="Bold" Margin="10"/>
+
+        <StackPanel Grid.Row="1" Margin="20">
+
+            <TextBlock Text="Адрес"/>
+            <TextBox x:Name="AddressBox" Height="30" Margin="0,4,0,10"/>
+
+            <TextBlock Text="Площадь (м²)"/>
+            <TextBox x:Name="SquareBox" Height="30" Margin="0,4,0,10"/>
+
+            <TextBlock Text="Этаж"/>
+            <TextBox x:Name="FloorBox" Height="30" Margin="0,4,0,10"/>
+
+            <TextBlock Text="Описание"/>
+            <TextBox x:Name="DescriptionBox" Height="60" TextWrapping="Wrap" Margin="0,4,0,10"/>
+
+            <TextBlock Text="Собственник"/>
+            <ComboBox x:Name="OwnerBox" Height="32" Margin="0,4,0,10"/>
+
+            <TextBlock Text="Тип недвижимости"/>
+            <ComboBox x:Name="RealtyTypeBox" Height="32" Margin="0,4,0,10"/>
+
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+                <CheckBox x:Name="OwnedCheckBox" Content="Собственная" Margin="0,0,20,0"/>
+                <CheckBox x:Name="ActiveCheckBox" Content="Активная"/>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <Button Content="Сохранить" Width="120" Height="36" Margin="0,0,10,0" Click="Save_Click"/>
+            <Button Content="Отмена" Width="120" Height="36" Click="Cancel_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

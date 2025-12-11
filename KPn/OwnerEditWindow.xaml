@@ -1,0 +1,52 @@
+﻿<Window x:Class="KPn.OwnerEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KPn"
+        mc:Ignorable="d"
+        Title="Редактирование собственника" Height="690" Width="450"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+
+    <Grid Margin="10">
+        <StackPanel Margin="10">
+
+            <TextBlock Text="Редактирование собственника" FontSize="22" FontWeight="Bold" Margin="0,0,0,10"/>
+
+            <TextBlock Text="ФИО"/>
+            <TextBox x:Name="FullNameBox" Height="51"/>
+
+            <TextBlock Text="Телефон"/>
+            <TextBox x:Name="PhoneBox" Height="52"/>
+
+            <TextBlock Text="Email"/>
+            <TextBox x:Name="EmailBox" Height="52"/>
+
+            <TextBlock Text="Адрес"/>
+            <TextBox x:Name="AddressBox" Height="47"/>
+
+            <TextBlock Text="ИНН"/>
+            <TextBox x:Name="INNBox" Height="47"/>
+
+            <TextBlock Text="Банковские реквизиты"/>
+            <TextBox x:Name="BankBox" Height="57" RenderTransformOrigin="0.5,0.5">
+                <TextBox.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform AngleX="2.694"/>
+                        <RotateTransform/>
+                        <TranslateTransform X="0.753"/>
+                    </TransformGroup>
+                </TextBox.RenderTransform>
+            </TextBox>
+
+            <TextBlock Text="Заметки"/>
+            <TextBox x:Name="NotesBox" Height="60" TextWrapping="Wrap"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+                <Button Content="Сохранить" Width="120" Height="36" Foreground="White" Click="SaveButton_Click"/>
+                <Button Content="Отмена" Width="100" Height="36" Click="CancelButton_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

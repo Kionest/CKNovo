@@ -29,6 +29,7 @@ namespace KPn
         private List<Tenants> allTenants;
         private List<Realty> allRealty;
         private List<Contracts> allContracts;
+        private List<Owners> allOwners;
 
         public ManagerWindow()
         {
@@ -36,10 +37,14 @@ namespace KPn
             LoadRealty();
             LoadTenants();
             LoadContracts();
+            LoadOwners();
 
             SetActiveButton(BtnObjects);
             ShowPanel(ObjectsPanel);
             LoadContractsStats();
+            UpdateRealtyStats();
+            UpdateTenantStats();
+            LoadOwnerStats();
         }
 
         #region Недвижимость
@@ -59,6 +64,7 @@ namespace KPn
                 db.Realty.Remove(selected);
                 db.SaveChanges();
                 LoadRealty();
+                UpdateRealtyStats();
             }
             else
             {
@@ -66,24 +72,26 @@ namespace KPn
             }
         }
 
-        private void AddButton_Click(object sender, RoutedEventArgs e)
+        private void AddRealtyButton_Click(object sender, RoutedEventArgs e)
         {
-            var win = new RealtyWindow();
+            var win = new RealtyAddWindow();
             if (win.ShowDialog() == true)
                 LoadRealty();
+                UpdateRealtyStats();
         }
 
-        private void EditButton_Click(object sender, RoutedEventArgs e)
+        private void EditRealtyButton_Click(object sender, RoutedEventArgs e)
         {
             if (RealtyGrid.SelectedItem is Realty selected)
             {
-                var win = new RealtyWindow(selected);
+                var win = new RealtyEditWindow(selected.RealtyID);
                 if (win.ShowDialog() == true)
                     LoadRealty();
+                    UpdateRealtyStats();
             }
             else
             {
-                MessageBox.Show("Выберите запись для редактирования.");
+                MessageBox.Show("Выберите объект.");
             }
         }
 
@@ -212,6 +220,7 @@ namespace KPn
                 }
 
                 LoadTenants();
+                UpdateTenantStats();
             }
         }
 
@@ -234,6 +243,7 @@ namespace KPn
             }
 
             LoadTenants();
+            UpdateTenantStats();
         }
 
         private void TenantSearchBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -309,6 +319,7 @@ namespace KPn
             if (form.ShowDialog() == true)
             {
                 LoadContracts();
+                LoadContractsStats();
             }
         }
 
@@ -326,6 +337,7 @@ namespace KPn
                         db.SaveChanges();
                     }
                     LoadContracts();
+                    LoadContractsStats();
                 }
             }
         }
@@ -338,6 +350,7 @@ namespace KPn
                 win.ShowDialog();
 
                 LoadContracts();
+                LoadContractsStats();
             }
             else
             {
@@ -407,7 +420,7 @@ namespace KPn
                         ShowPanel(ContractsPanel);
                         break;
                     case "3":
-                        ShowPanel(MapPanel);
+                        ShowPanel(OwnersPanel);
                         break;
                 }
             }
@@ -431,7 +444,7 @@ namespace KPn
             ObjectsPanel.Visibility = Visibility.Collapsed;
             ClientsPanel.Visibility = Visibility.Collapsed;
             ContractsPanel.Visibility = Visibility.Collapsed;
-            MapPanel.Visibility = Visibility.Collapsed;
+            OwnersPanel.Visibility = Visibility.Collapsed;
             panelToShow.Visibility = Visibility.Visible;
         }
 
@@ -445,6 +458,93 @@ namespace KPn
         }
 
         #endregion
+
+        #region Собственники
+
+        private void LoadOwners()
+        {
+            using (var db = new NovotekEntities())
+            {
+                OwnersGrid.ItemsSource = db.Owners.ToList();
+            }
+        }
+
+        private void AddOwnerButton_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new AddOwnerWindow();
+            if (win.ShowDialog() == true)
+                LoadOwners();
+                LoadOwnerStats();
+        }
+
+        private void EditOwnerButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (OwnersGrid.SelectedItem is Owners owner)
+            {
+                var win = new OwnerEditWindow(owner.OwnerID);
+                if (win.ShowDialog() == true)
+                    LoadOwners();
+                    LoadOwnerStats();
+            }
+            else
+            {
+                MessageBox.Show("Выберите собственника.");
+            }
+        }
+
+        private void DeleteOwner_Click(object sender, RoutedEventArgs e)
+        {
+            if (OwnersGrid.SelectedItem is Owners selected)
+
+            if (MessageBox.Show("Удалить собственника?", "Подтверждение",
+                MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                using (var db = new NovotekEntities())
+                {
+                    var o = db.Owners.Find(selected.OwnerID);
+                    db.Owners.Remove(o);
+                    db.SaveChanges();
+                }
+                LoadOwners();
+            }
+        }
+
+        private void OwnerSearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string text = OwnerSearchBox.Text.ToLower();
+
+            using (var db = new NovotekEntities())
+            {
+                OwnersGrid.ItemsSource = db.Owners
+                    .Where(o =>
+                        o.FullName.ToLower().Contains(text) ||
+                        o.PhoneNumber.ToLower().Contains(text) ||
+                        o.Email.ToLower().Contains(text))
+                    .ToList();
+            }
+        }
+
+        private void LoadOwnerStats()
+        {
+            using (var db = new NovotekEntities())
+            {
+                int totalOwners = db.Owners.Count();
+
+                int totalRealtyOwned = db.Realty.Count(r => r.OwnerID != null);
+
+                double avgRealtyPerOwner =
+                    totalOwners > 0
+                        ? totalRealtyOwned / (double)totalOwners
+                        : 0;
+
+                TotalOwnersText.Text = totalOwners.ToString();
+                TotalOwnerRealtyText.Text = totalRealtyOwned.ToString();
+                AvgRealtyPerOwnerText.Text = avgRealtyPerOwner.ToString("0.0");
+            }
+        }
+
+        #endregion
+
     }
 }
 

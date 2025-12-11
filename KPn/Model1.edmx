@@ -48,7 +48,6 @@
           <Property Name="ContractID" Type="int" Nullable="false" />
           <Property Name="PaymentDate" Type="date" Nullable="false" />
           <Property Name="Amount" Type="decimal" Precision="15" Scale="2" Nullable="false" />
-          <Property Name="Period" Type="date" Nullable="false" />
           <Property Name="PaymentMethod" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Realty">
@@ -291,7 +290,6 @@
           <Property Name="ContractID" Type="Int32" Nullable="false" />
           <Property Name="PaymentDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Amount" Type="Decimal" Precision="15" Scale="2" Nullable="false" />
-          <Property Name="Period" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="PaymentMethod" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Contracts" Relationship="Self.FK__Payments__Contra__5812160E" FromRole="Payments" ToRole="Contracts" />
         </EntityType>
@@ -540,7 +538,6 @@
                 <ScalarProperty Name="ContractID" ColumnName="ContractID" />
                 <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Period" ColumnName="Period" />
                 <ScalarProperty Name="PaymentMethod" ColumnName="PaymentMethod" />
               </MappingFragment>
             </EntityTypeMapping>

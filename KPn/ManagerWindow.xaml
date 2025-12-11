@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KPn"
-        
         mc:Ignorable="d"
         Height="700" Width="1000">
 
@@ -24,7 +23,7 @@
                 <Button x:Name="BtnObjects" Content="🏢 Объекты" Click="MenuButton_Click" Tag="0" Canvas.Left="41" Canvas.Top="17"/>
                 <Button x:Name="BtnClients" Content="👥 Клиенты" Click="MenuButton_Click" Tag="1" Canvas.Left="22" Canvas.Top="62"/>
                 <Button x:Name="BtnContracts" Content="📄 Договоры" Click="MenuButton_Click" Tag="2" Canvas.Left="19" Canvas.Top="99"/>
-                <Button x:Name="BtnMap" Content="🗺️ Карта" Click="MenuButton_Click" Tag="3" Canvas.Left="26" Canvas.Top="144"/>
+                <Button x:Name="BtnMap" Content="🏠 Cобственники" Click="MenuButton_Click" Tag="3" Canvas.Left="26" Canvas.Top="144"/>
                 <Button Content="🚪 Выйти" Click="ExitButton_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Canvas.Left="5" Canvas.Top="577"/>
             </Canvas>
         </StackPanel>
@@ -37,8 +36,8 @@
                 <TextBlock Text="🏢 Управление объектами"  FontSize="24" FontWeight="Bold" Margin="20,10,20,20"/>
 
                 <StackPanel Orientation="Horizontal" Margin="20,0,20,20">
-                    <Button Content="➕ Добавить объект" Style="{StaticResource ActionButtonStyle}" Width="150" Click="AddButton_Click"/>
-                    <Button Content="✏️ Редактировать" Style="{StaticResource ActionButtonStyle}" Width="134" Click="EditButton_Click"/>
+                    <Button Content="➕ Добавить объект" Style="{StaticResource ActionButtonStyle}" Width="150" Click="AddRealtyButton_Click"/>
+                    <Button Content="✏️ Редактировать" Style="{StaticResource ActionButtonStyle}" Width="134" Click="EditRealtyButton_Click"/>
                     <Button Content="🗑️ Удалить" Style="{StaticResource ActionButtonStyle}" Width="100" RenderTransformOrigin="0.5,0.5" Click="DeleteButton_Click"/>
                 </StackPanel>
 
@@ -99,11 +98,14 @@
                 <DataGrid x:Name="RealtyGrid" Margin="20" AutoGenerateColumns="False" IsReadOnly="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding RealtyID}" Width="60"/>
-                        <DataGridTextColumn Header="Адрес" Binding="{Binding Address}" Width="200"/>
-                        <DataGridTextColumn Header="Площадь" Binding="{Binding SquareMeters}" Width="100"/>
+                        <DataGridTextColumn Header="Владелец" Binding="{Binding Owners.FullName}" Width="200"/>
+                        <DataGridTextColumn Header="Тип" Binding="{Binding RealtyTypes.TypeName}" Width="150"/>
+                        <DataGridTextColumn Header="Адрес" Binding="{Binding Address}" Width="250"/>
+                        <DataGridTextColumn Header="Площадь" Binding="{Binding SquareMeters}" Width="120"/>
                         <DataGridTextColumn Header="Этаж" Binding="{Binding Floor}" Width="80"/>
-                        <DataGridCheckBoxColumn Header="Собств." Binding="{Binding IsOwned}" Width="80"/>
-                        <DataGridCheckBoxColumn Header="Активен" Binding="{Binding IsActive}" Width="80"/>
+                        <DataGridCheckBoxColumn Header="Собственность" Binding="{Binding IsOwned}" Width="130"/>
+                        <DataGridCheckBoxColumn Header="Активно" Binding="{Binding IsActive}" Width="100"/>
+                        <DataGridTextColumn Header="Описание" Binding="{Binding Description}" Width="200"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>
@@ -171,12 +173,15 @@
 
             <!-- Договоры -->
             <StackPanel x:Name="ContractsPanel" Visibility="Collapsed">
-                <TextBlock Text="📄 Управление договорами" FontSize="24" FontWeight="Bold" Margin="20,10,20,20"/>
+                <StackPanel Orientation="Horizontal" Margin="20,0,20,20" Height="62">
+                    <TextBlock Text="📄 Управление договорами" FontSize="24" FontWeight="Bold" Margin="20,10,0,0" Width="450"/>
+                    <Button Content="Формирование отчетов" Width="159" Margin="70,10,80,0" Height="32"/>
+                </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="20,0,20,20">
-                    <Button Content="📝 Новый договор" Width="150" Click="AddContract_Click"/>
-                    <Button Content="✏️ Редактировать" Width="150" Click="EditContract_Click" />
-                    <Button Content="🗑️ Удалить" Width="150" Click="DeleteContract_Click" />
+                    <Button Content="📝 Новый договор"  Style="{StaticResource ActionButtonStyle}" Width="150" Click="AddContract_Click"/>
+                    <Button Content="✏️ Редактировать"  Style="{StaticResource ActionButtonStyle}" Width="150" Click="EditContract_Click" />
+                    <Button Content="🗑️ Удалить"  Style="{StaticResource ActionButtonStyle}" Width="150" Click="DeleteContract_Click" />
                 </StackPanel>
 
                 <Grid Margin="20,10,20,20">
@@ -244,12 +249,60 @@
                 </DataGrid>
             </StackPanel>
 
-            <!-- Карта -->
-            <StackPanel x:Name="MapPanel" Visibility="Visible">
-                <TextBlock Text="🗺️ Карта объектов" FontSize="24" FontWeight="Bold" Margin="20,10,20,20"/>
-                
-            </StackPanel>
+            <!-- Собственники -->
+            <StackPanel x:Name="OwnersPanel" Visibility="Visible">
+                <TextBlock Text="🏠 Управление собственниками" FontSize="24" FontWeight="Bold" Margin="20,10,20,20"/>
 
+                <StackPanel Orientation="Horizontal" Margin="20,0,20,20">
+                    <Button Content="➕ Добавить собственника" Style="{StaticResource ActionButtonStyle}" Click="AddOwnerButton_Click" Width="180"/>
+                    <Button Content="✏️ Редактировать" Style="{StaticResource ActionButtonStyle}" Click="EditOwnerButton_Click"  Width="150"/>
+                    <Button Content="🗑 Удалить" Click="DeleteOwner_Click" Style="{StaticResource ActionButtonStyle}" Width="150"/>
+                </StackPanel>
+
+                <UniformGrid Rows="1" Columns="3" Margin="0,0,0,20">
+                    <Border Background="White" CornerRadius="10" Padding="20" Margin="10" BorderBrush="#DDDDDD" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Всего собственников" FontSize="14" Foreground="#555"/>
+                            <TextBlock x:Name="TotalOwnersText" Text="0" FontSize="32" FontWeight="Bold" Margin="0,5,0,0"/>
+                            <TextBlock Text="Активные записи" FontSize="12" Foreground="#2A6FDB" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Background="White" CornerRadius="10" Padding="20" Margin="10" BorderBrush="#DDDDDD" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Объектов на собственниках" FontSize="14" Foreground="#555"/>
+                            <TextBlock x:Name="TotalOwnerRealtyText" Text="0" FontSize="32" FontWeight="Bold" Margin="0,5,0,0"/>
+                            <TextBlock Text="Все связанные объекты" FontSize="12" Foreground="Green" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Background="White" CornerRadius="10" Padding="20" Margin="10" BorderBrush="#DDDDDD" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Среднее кол-во объектов" FontSize="14" Foreground="#555"/>
+                            <TextBlock x:Name="AvgRealtyPerOwnerText" Text="0" FontSize="32" FontWeight="Bold" Margin="0,5,0,0"/>
+                            <TextBlock Text="Среднее значение" FontSize="12" Foreground="DarkOrange" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </UniformGrid>
+
+                <StackPanel Margin="20,10,20,10">
+                    <TextBlock Text="Поиск"/>
+                    <TextBox x:Name="OwnerSearchBox" Height="44" TextChanged="OwnerSearchBox_TextChanged"/>
+                </StackPanel>
+
+                <DataGrid x:Name="OwnersGrid" Margin="10" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding OwnerID}" Width="60"/>
+                        <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Width="200"/>
+                        <DataGridTextColumn Header="Телефон" Binding="{Binding PhoneNumber}" Width="150"/>
+                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="200"/>
+                        <DataGridTextColumn Header="Адрес" Binding="{Binding Address}" Width="200"/>
+                        <DataGridTextColumn Header="ИНН" Binding="{Binding INN}" Width="120"/>
+                        <DataGridTextColumn Header="Банк. реквизиты" Binding="{Binding BankDetails}" Width="200"/>
+                        <DataGridTextColumn Header="Заметки" Binding="{Binding Notes}" Width="200"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>
