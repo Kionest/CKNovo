@@ -172,10 +172,10 @@
             </StackPanel>
 
             <!-- Договоры -->
-            <StackPanel x:Name="ContractsPanel" Visibility="Collapsed">
+            <StackPanel x:Name="ContractsPanel" Visibility="Visible">
                 <StackPanel Orientation="Horizontal" Margin="20,0,20,20" Height="62">
                     <TextBlock Text="📄 Управление договорами" FontSize="24" FontWeight="Bold" Margin="20,10,0,0" Width="450"/>
-                    <Button Content="Формирование отчетов" Width="159" Margin="70,10,80,0" Height="32"/>
+                    <Button Content="Формирование отчетов" Width="159" Margin="70,10,80,0" Height="32" Click="Otchty_Click"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="20,0,20,20">
@@ -250,7 +250,7 @@
             </StackPanel>
 
             <!-- Собственники -->
-            <StackPanel x:Name="OwnersPanel" Visibility="Visible">
+            <StackPanel x:Name="OwnersPanel" Visibility="Collapsed">
                 <TextBlock Text="🏠 Управление собственниками" FontSize="24" FontWeight="Bold" Margin="20,10,20,20"/>
 
                 <StackPanel Orientation="Horizontal" Margin="20,0,20,20">

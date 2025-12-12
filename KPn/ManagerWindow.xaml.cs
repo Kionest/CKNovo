@@ -545,6 +545,11 @@ namespace KPn
 
         #endregion
 
+        private void Otchty_Click(object sender, RoutedEventArgs e)
+        {
+            ReportsWindow reportsWindow = new ReportsWindow();
+            reportsWindow.Show();
+        }
     }
 }
 
