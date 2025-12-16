@@ -5,31 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KPn"
         mc:Ignorable="d"
-        Title="Добавить собственника" Height="590" Width="450"
+        Title="Добавить собственника" Height="690" Width="450"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
 
-    <Grid Background="#F7F7F7" Margin="10">
+    <Grid Margin="10">
         <StackPanel Margin="10">
 
             <TextBlock Text="Добавление собственника" FontSize="22" FontWeight="Bold" Margin="0,0,0,10"/>
 
             <TextBlock Text="ФИО"/>
-            <TextBox x:Name="FullNameBox" Height="32"/>
+            <TextBox x:Name="FullNameBox" Height="50"/>
 
             <TextBlock Text="Телефон"/>
-            <TextBox x:Name="PhoneBox" Height="32"/>
+            <TextBox x:Name="PhoneBox" Height="50"/>
 
             <TextBlock Text="Email"/>
-            <TextBox x:Name="EmailBox" Height="32"/>
+            <TextBox x:Name="EmailBox" Height="50"/>
 
             <TextBlock Text="Адрес"/>
-            <TextBox x:Name="AddressBox" Height="32"/>
+            <TextBox x:Name="AddressBox" Height="50"/>
 
             <TextBlock Text="ИНН"/>
-            <TextBox x:Name="INNBox" Height="32"/>
+            <TextBox x:Name="INNBox" Height="50"/>
 
             <TextBlock Text="Банковские реквизиты"/>
-            <TextBox x:Name="BankBox" Height="32"/>
+            <TextBox x:Name="BankBox" Height="50"/>
 
             <TextBlock Text="Заметки"/>
             <TextBox x:Name="NotesBox" Height="60" TextWrapping="Wrap"/>

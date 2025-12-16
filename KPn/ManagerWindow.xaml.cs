@@ -209,18 +209,23 @@ namespace KPn
 
         private void AddTenantButton_Click(object sender, RoutedEventArgs e)
         {
-            TenantAddWindow win = new TenantAddWindow();
-
+            var win = new AddTenantWindow();
             if (win.ShowDialog() == true)
-            {
-                using (var db = new NovotekEntities())
-                {
-                    db.Tenants.Add(win.NewTenant);
-                    db.SaveChanges();
-                }
-
                 LoadTenants();
                 UpdateTenantStats();
+        }
+
+        private void EditTenantButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (TenantsGrid.SelectedItem is Tenants t)
+            {
+                var win = new EditTenantWindow(t.TenantID);
+                if (win.ShowDialog() == true)
+                    LoadTenants();
+            }
+            else
+            {
+                MessageBox.Show("Выберите клиента");
             }
         }
 

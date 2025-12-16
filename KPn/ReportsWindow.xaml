@@ -13,7 +13,6 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-
         <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
             <TextBlock VerticalAlignment="Center" Text="Шаблон:" Margin="0,0,8,0" />
             <ComboBox x:Name="TemplateCombo" Width="200" SelectedIndex="0">
@@ -21,10 +20,8 @@
                 <ComboBoxItem>Entity</ComboBoxItem>
             </ComboBox>
 
-
             <Button x:Name="RefreshBtn" Content="Обновить список контрактов" Margin="16,0,0,0" Click="RefreshBtn_Click" />
         </StackPanel>
-
 
         <DataGrid x:Name="ContractsGrid" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single">
             <DataGrid.Columns>
@@ -36,7 +33,6 @@
                 <DataGridTextColumn Header="Ежемесячная" Binding="{Binding MonthlyRent}" Width="110" />
             </DataGrid.Columns>
         </DataGrid>
-
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
             <Button x:Name="GenerateBtn" Content="Сгенерировать DOCX" Width="160" Click="GenerateBtn_Click" />

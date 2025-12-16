@@ -19,6 +19,8 @@ namespace KPn
         public string Password { get; set; }
         public Nullable<int> RoleID { get; set; }
         public string PasswordHash { get; set; }
+        public System.DateTime CreatedAt { get; set; }
+        public bool IsActive { get; set; }
     
         public virtual Role Role { get; set; }
     }

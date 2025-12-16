@@ -111,13 +111,13 @@
             </StackPanel>
 
             <!-- Клиенты -->
-            <StackPanel x:Name="ClientsPanel" Visibility="Collapsed">
+            <StackPanel x:Name="ClientsPanel" Visibility="Visible">
                 <TextBlock Text="👥 Управление клиентами" FontSize="24" FontWeight="Bold" Margin="20,10,20,20"/>
 
                 <StackPanel Orientation="Horizontal" Margin="20,0,20,20">
-                    <Button Content="➕ Добавить клиента" Style="{StaticResource ActionButtonStyle}" Click="AddTenantButton_Click" Width="150"/>
-                    <Button Content="📞 Контакты" Style="{StaticResource ActionButtonStyle}" Click="DeleteTenantButton_Click" Width="150"/>
-                    <Button Content="📧 Рассылка" Style="{StaticResource ActionButtonStyle}"  Width="150"/>
+                    <Button Content="➕ Добавить клиента" Style="{StaticResource ActionButtonStyle}" Width="150" Click="AddTenantButton_Click"/>
+                    <Button Content="✏️ Редактировать" Style="{StaticResource ActionButtonStyle}" Width="134" Click="EditTenantButton_Click"/>
+                    <Button Content="🗑️ Удалить" Style="{StaticResource ActionButtonStyle}" Width="100" RenderTransformOrigin="0.5,0.5" Click="DeleteTenantButton_Click"/>
                 </StackPanel>
 
                 <Grid Margin="20,10,20,20">
@@ -172,7 +172,7 @@
             </StackPanel>
 
             <!-- Договоры -->
-            <StackPanel x:Name="ContractsPanel" Visibility="Visible">
+            <StackPanel x:Name="ContractsPanel" Visibility="Collapsed">
                 <StackPanel Orientation="Horizontal" Margin="20,0,20,20" Height="62">
                     <TextBlock Text="📄 Управление договорами" FontSize="24" FontWeight="Bold" Margin="20,10,0,0" Width="450"/>
                     <Button Content="Формирование отчетов" Width="159" Margin="70,10,80,0" Height="32" Click="Otchty_Click"/>

@@ -131,13 +131,17 @@ namespace KPn
         }
         #endregion
 
+        #region Карточки
         private void LoadUserStatistics()
         {
             using (var db = new NovotekEntities())
             {
                 var users = db.Users.ToList();
                 var roles = db.Role.ToList();
+
                 TotalUsersText.Text = users.Count.ToString();
+
+                ActiveUsersText.Text = $"Активных: {users.Count(u => u.IsActive)}";
 
                 RolesStatsPanel.Children.Clear();
 
@@ -145,18 +149,43 @@ namespace KPn
                 {
                     int count = users.Count(u => u.RoleID == role.RoleID);
 
-                    TextBlock tb = new TextBlock
+                    var roleText = new TextBlock
                     {
                         Text = $"{role.Name}: {count}",
                         FontSize = 13,
                         Margin = new Thickness(0, 2, 0, 2),
-                        Foreground = new SolidColorBrush(Colors.Black)
+                        Foreground = GetRoleColor(role.Name)
                     };
 
-                    RolesStatsPanel.Children.Add(tb);
+                    RolesStatsPanel.Children.Add(roleText);
                 }
+
+                DateTime today = DateTime.Today;
+                UsersTodayText.Text = $"Сегодня: {users.Count(u => u.CreatedAt >= today)}";
+                UsersWeekText.Text = $"За неделю: {users.Count(u => u.CreatedAt >= today.AddDays(-7))}";
+                UsersMonthText.Text = $"За месяц: {users.Count(u => u.CreatedAt >= today.AddMonths(-1))}";
             }
         }
+
+        private Brush GetRoleColor(string roleName)
+        {
+            switch (roleName)
+            {
+                case "Администратор":
+                    return new SolidColorBrush(Colors.DarkRed);
+
+                case "Менеджер":
+                    return new SolidColorBrush(Colors.DarkBlue);
+
+                case "Пользователь":
+                    return new SolidColorBrush(Colors.DarkGreen);
+
+                default:
+                    return new SolidColorBrush(Colors.Black);
+            }
+        }
+        #endregion
+
 
         private void ShowMessage(string message, bool isError)
         {
