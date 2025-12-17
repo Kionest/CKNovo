@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KPn"
         mc:Ignorable="d"
-        Height="700" Width="1000">
+        WindowStartupLocation="CenterScreen"
+        Height="720" Width="1250">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -20,11 +21,22 @@
             <Label Content="CKNova" FontSize="18" FontWeight="Bold"/>
 
             <Canvas Margin="10,20,10,500">
-                <Button x:Name="BtnObjects" Content="🏢 Объекты" Click="MenuButton_Click" Tag="0" Canvas.Left="41" Canvas.Top="17"/>
-                <Button x:Name="BtnClients" Content="👥 Клиенты" Click="MenuButton_Click" Tag="1" Canvas.Left="22" Canvas.Top="62"/>
-                <Button x:Name="BtnContracts" Content="📄 Договоры" Click="MenuButton_Click" Tag="2" Canvas.Left="19" Canvas.Top="99"/>
-                <Button x:Name="BtnMap" Content="🏠 Cобственники" Click="MenuButton_Click" Tag="3" Canvas.Left="26" Canvas.Top="144"/>
-                <Button Content="🚪 Выйти" Click="ExitButton_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Canvas.Left="5" Canvas.Top="577"/>
+                <Button x:Name="BtnObjects" Content="🏢 Объекты" Click="MenuButton_Click" Tag="0" Canvas.Left="31" Canvas.Top="17" Height="30" Width="137"/>
+                <Button x:Name="BtnClients" Content="👥 Клиенты" Click="MenuButton_Click" Tag="1" Canvas.Left="31" Canvas.Top="60" Height="30" Width="137"/>
+                <Button x:Name="BtnContracts" Content="📄 Договоры" Click="MenuButton_Click" Tag="2" Canvas.Left="31" Canvas.Top="99" Height="30" Width="137"/>
+                <Button x:Name="BtnMap" Content="🏠 Cобственники" Click="MenuButton_Click" Tag="3" Canvas.Left="31" Canvas.Top="144" Height="30" Width="137"/>
+
+                <Button Content="😨" FontSize="20" Style="{StaticResource ActionButtonStyle}" Width="36" Height="31" HorizontalAlignment="Left" VerticalAlignment="Top" Click="AboutDeveloper_Click" Canvas.Left="165" Canvas.Top="544"/>
+
+                <Canvas Background="White">
+                    <Line X1="0" Y1="50" X2="250" Y2="50" Stroke="Gray" StrokeThickness="2" Canvas.Left="-9" Canvas.Top="-58" HorizontalAlignment="Left" VerticalAlignment="Center" Width="218"/>
+                </Canvas>
+
+                <Canvas Background="White">
+                    <Line X1="0" Y1="50" X2="250" Y2="50" Stroke="Gray" StrokeThickness="2" Canvas.Left="-9" Canvas.Top="530" HorizontalAlignment="Center" VerticalAlignment="Top" Width="218"/>
+                </Canvas>
+
+                <Button Content="🚪 Выйти" Style="{StaticResource ActionButtonStyle}" Click="ExitButton_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="-3" Canvas.Top="587" Width="76"/>
             </Canvas>
         </StackPanel>
 
@@ -70,7 +82,6 @@
                             <StackPanel x:Name="OwnersStatsPanel" Margin="0,5,0,0"/>
                         </StackPanel>
                     </Border>
-
                 </Grid>
 
                 <StackPanel Margin="20,0,20,10">
@@ -79,7 +90,7 @@
 
                         <StackPanel>
                             <TextBlock Text="Поиск по адресу" FontSize="12" Margin="0,0,0,3"/>
-                            <TextBox x:Name="RealtySearchBox" Width="533" Height="45" Margin="0,0,20,0" TextChanged="RealtyFilters_Changed"/>
+                            <TextBox x:Name="RealtySearchBox" Width="750" Height="45" Margin="0,0,20,0" TextChanged="RealtyFilters_Changed"/>
                         </StackPanel>
 
                         <StackPanel>
@@ -111,7 +122,7 @@
             </StackPanel>
 
             <!-- Клиенты -->
-            <StackPanel x:Name="ClientsPanel" Visibility="Visible">
+            <StackPanel x:Name="ClientsPanel" Visibility="Collapsed">
                 <TextBlock Text="👥 Управление клиентами" FontSize="24" FontWeight="Bold" Margin="20,10,20,20"/>
 
                 <StackPanel Orientation="Horizontal" Margin="20,0,20,20">
@@ -172,10 +183,10 @@
             </StackPanel>
 
             <!-- Договоры -->
-            <StackPanel x:Name="ContractsPanel" Visibility="Collapsed">
+            <StackPanel x:Name="ContractsPanel" Visibility="Visible">
                 <StackPanel Orientation="Horizontal" Margin="20,0,20,20" Height="62">
                     <TextBlock Text="📄 Управление договорами" FontSize="24" FontWeight="Bold" Margin="20,10,0,0" Width="450"/>
-                    <Button Content="Формирование отчетов" Width="159" Margin="70,10,80,0" Height="32" Click="Otchty_Click"/>
+                    <Button Content="Формирование отчетов" Width="159" Margin="280,0,0,0" Height="32" Click="Otchty_Click"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="20,0,20,20">
@@ -195,7 +206,7 @@
                         <StackPanel>
                             <TextBlock Text="Всего договоров" FontSize="14" Foreground="#555"/>
                             <TextBlock x:Name="TotalContractsText" Text="0" FontSize="30" FontWeight="Bold" Margin="0,5,0,0"/>
-                            <TextBlock x:Name="ActiveContractsText" Text="Активные: 0 (0%)" FontSize="12" Foreground="#2A6FDB"/>
+                            <TextBlock x:Name="ActiveContractsText" Text="Активные" FontSize="12" Foreground="#2A6FDB"/>
                         </StackPanel>
                     </Border>
 
@@ -219,7 +230,7 @@
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,0" VerticalAlignment="Center">
                         <StackPanel>
                             <TextBlock Text="Поиск по номеру / объекту / клиенту" FontSize="12" Margin="0,0,0,3"/>
-                            <TextBox x:Name="ContractsSearchBox" Width="500" Height="40" TextChanged="ContractsFilters_Changed"/>
+                            <TextBox x:Name="ContractsSearchBox" Width="750" Height="40" TextChanged="ContractsFilters_Changed"/>
                         </StackPanel>
 
                         <StackPanel Margin="20,0,0,0">

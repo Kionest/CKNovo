@@ -198,5 +198,11 @@ namespace KPn
             _context?.Dispose();
             base.OnClosed(e);
         }
+
+        private void AboutDeveloper_Click(object sender, RoutedEventArgs e)
+        {
+            DeveloperInfoWindow developerWindow = new DeveloperInfoWindow();
+            developerWindow.Show();
+        }
     }
 }

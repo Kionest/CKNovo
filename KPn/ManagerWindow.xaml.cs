@@ -29,7 +29,6 @@ namespace KPn
         private List<Tenants> allTenants;
         private List<Realty> allRealty;
         private List<Contracts> allContracts;
-        private List<Owners> allOwners;
 
         public ManagerWindow()
         {
@@ -377,7 +376,6 @@ namespace KPn
                 TotalContractsText.Text = total.ToString();
 
                 double percent = total > 0 ? (active * 100.0 / total) : 0;
-                ActiveContractsText.Text = $"Активные: {active} ({percent:F1}%)";
 
                 ContractStatusesPanel.Children.Clear();
                 var grouped = contracts
@@ -402,6 +400,12 @@ namespace KPn
 
                 ExpiringContractsText.Text = expiring.ToString();
             }
+        }
+
+        private void Otchty_Click(object sender, RoutedEventArgs e)
+        {
+            ReportsWindow reportsWindow = new ReportsWindow();
+            reportsWindow.Show();
         }
 
         #endregion
@@ -460,6 +464,12 @@ namespace KPn
             {
                 this.Close();
             }
+        }
+
+        private void AboutDeveloper_Click(object sender, RoutedEventArgs e)
+        {
+            DeveloperInfoWindow developerWindow = new DeveloperInfoWindow();
+            developerWindow.Show();
         }
 
         #endregion
@@ -550,11 +560,6 @@ namespace KPn
 
         #endregion
 
-        private void Otchty_Click(object sender, RoutedEventArgs e)
-        {
-            ReportsWindow reportsWindow = new ReportsWindow();
-            reportsWindow.Show();
-        }
     }
 }
 

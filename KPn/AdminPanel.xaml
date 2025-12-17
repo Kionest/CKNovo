@@ -6,12 +6,13 @@
         xmlns:local="clr-namespace:KPn"
         mc:Ignorable="d"
         Title="Панель администратора" 
-        Height="700" Width="800"
+        Height="720" Width="800"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <StackPanel x:Name="AdminPanel1">
 
             <TextBlock Text="⚙ Панель администратора" FontSize="24" FontWeight="Bold" Margin="20,10,20,20"/>
+            <Button Content="😨" FontSize="20" Style="{StaticResource ActionButtonStyle}" Width="36" Height="31" Click="AboutDeveloper_Click"/>
 
             <!--Карточки-->
             <Grid Margin="20,10,20,20">
@@ -47,7 +48,7 @@
             </Grid>
 
             <TextBlock Grid.Row="0" Text="Управление пользователями" FontSize="18" FontWeight="Bold" Margin="20,0,20,10"/>
-            
+
             <DataGrid x:Name="dgUsers" AutoGenerateColumns="False" CanUserAddRows="False" Margin="20,0,20,10" Height="250">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID" Binding="{Binding UserID}" Width="60"/>

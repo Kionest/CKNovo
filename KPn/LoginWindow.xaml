@@ -20,7 +20,7 @@
 
                 <Grid>
                     <Button x:Name="btnClose"  Content="×" Width="38" Height="35" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" BorderThickness="0"
-                            Foreground="Gray" FontSize="24" FontWeight="Bold" Click="BtnClose_Click" Cursor="Hand" Margin="319,0,0,0"/>
+                     Foreground="Gray" FontSize="24" FontWeight="Bold" Click="BtnClose_Click" Cursor="Hand" Margin="319,0,0,0"/>
                 </Grid>
             </Border>
 
