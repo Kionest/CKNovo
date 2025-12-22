@@ -5,7 +5,7 @@ VisualStudioVersion = 17.13.35818.85
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KPn", "KPn\KPn.csproj", "{C825FC88-2DE4-489F-BD88-FB957601B4AB}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "CKnovo", "CKnovo\CKnovo.vdproj", "{377AC313-F8E5-668C-B31E-DC203DD56D03}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Cknova", "Cknova\Cknova.vdproj", "{80AB711C-8A36-F534-6CC0-B645FA9DF547}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,9 +17,9 @@ Global
 		{C825FC88-2DE4-489F-BD88-FB957601B4AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C825FC88-2DE4-489F-BD88-FB957601B4AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C825FC88-2DE4-489F-BD88-FB957601B4AB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{377AC313-F8E5-668C-B31E-DC203DD56D03}.Debug|Any CPU.ActiveCfg = Debug
-		{377AC313-F8E5-668C-B31E-DC203DD56D03}.Release|Any CPU.ActiveCfg = Release
-		{377AC313-F8E5-668C-B31E-DC203DD56D03}.Release|Any CPU.Build.0 = Release
+		{80AB711C-8A36-F534-6CC0-B645FA9DF547}.Debug|Any CPU.ActiveCfg = Debug
+		{80AB711C-8A36-F534-6CC0-B645FA9DF547}.Release|Any CPU.ActiveCfg = Release
+		{80AB711C-8A36-F534-6CC0-B645FA9DF547}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

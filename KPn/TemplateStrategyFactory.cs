@@ -13,7 +13,10 @@ namespace KPn
             if (type == "Entity")
                 return new EntityTemplateStrategy();
 
-            return new IndividualTemplateStrategy();
+            if (type == "Individual")
+                return new IndividualTemplateStrategy();
+
+            throw new ArgumentException("Неизвестный тип шаблона: " + type);
         }
     }
 }

@@ -16,8 +16,8 @@
         <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
             <TextBlock VerticalAlignment="Center" Text="Шаблон:" Margin="0,0,8,0" />
             <ComboBox x:Name="TemplateCombo" Width="200" SelectedIndex="0">
-                <ComboBoxItem>Individual</ComboBoxItem>
-                <ComboBoxItem>Entity</ComboBoxItem>
+                <ComboBoxItem Content="Физическое лицо" Tag="Individual"/>
+                <ComboBoxItem Content="Юридическое лицо" Tag="Entity"/>
             </ComboBox>
 
             <Button x:Name="RefreshBtn" Content="Обновить список контрактов" Margin="16,0,0,0" Click="RefreshBtn_Click" />

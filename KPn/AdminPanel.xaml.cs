@@ -79,7 +79,9 @@ namespace KPn
                 {
                     Login = login,
                     PasswordHash = passwordHash,
-                    RoleID = selectedRole.RoleID
+                    RoleID = selectedRole.RoleID,
+                    IsActive = true, 
+                    CreatedAt = DateTime.Now 
                 };
 
                 _context.Users.Add(newUser);
@@ -128,6 +130,7 @@ namespace KPn
                     ShowMessage($"Ошибка при удалении пользователя: {ex.Message}", isError: true);
                 }
             }
+            LoadUserStatistics();
         }
         #endregion
 

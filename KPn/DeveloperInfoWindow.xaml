@@ -47,7 +47,7 @@
 
                     <StackPanel>
                         <TextBlock Text="О приложении:" FontWeight="Bold" FontSize="14"/>
-                        <TextBlock Text="Версия: 1.9.0" Margin="10,5,0,0"/>
+                        <TextBlock Text="Версия: 1.9.1" Margin="10,5,0,0"/>
                         <TextBlock Text="Дата сборки: 18.12.2025" Margin="10,2,0,0"/>
                         <TextBlock Text="© Компания ООО 'Моя'" Margin="10,2,0,0" Foreground="#FF666666"/>
                     </StackPanel>

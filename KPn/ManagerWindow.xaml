@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:KPn"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Height="720" Width="1250">
+        Height="720" Width="1270">
 
     <Grid>
         <Grid.ColumnDefinitions>

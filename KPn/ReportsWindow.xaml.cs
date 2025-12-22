@@ -87,32 +87,36 @@ namespace KPn
 
         private void GenerateBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (ContractsGrid.SelectedItem is Contracts contract)
-            {
-                string templateType = (TemplateCombo.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "Individual";
-                try
-                {
-                    ContractModel model = new ContractModel(contract);
-
-                    string outPath = facade.GenerateContract(model, templateType);
-                    MessageBox.Show($"Готово. Файл: {outPath}", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                    var folder = System.IO.Path.GetDirectoryName(outPath);
-                    if (Directory.Exists(folder))
-                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
-                        {
-                            FileName = folder,
-                            UseShellExecute = true
-                        });
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-            else
+            if (!(ContractsGrid.SelectedItem is Contracts contract))
             {
                 MessageBox.Show("Выберите контракт в списке.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                var selectedItem = TemplateCombo.SelectedItem as ComboBoxItem;
+                string templateType = selectedItem?.Tag?.ToString() ?? "Individual";
+
+                ContractModel model = new ContractModel(contract);
+
+                string outPath = facade.GenerateContract(model, templateType);
+
+                MessageBox.Show($"Готово. Файл: {outPath}", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                var folder = System.IO.Path.GetDirectoryName(outPath);
+                if (Directory.Exists(folder))
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = folder,
+                        UseShellExecute = true
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

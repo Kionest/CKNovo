@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:KPn"
         mc:Ignorable="d"
         Title="Панель администратора" 
-        Height="720" Width="800"
+        Height="780" Width="800"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <StackPanel x:Name="AdminPanel1">
@@ -86,9 +86,9 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="Логин:" VerticalAlignment="Center" Margin="0,0,5,5"/>
-                        <TextBox Grid.Row="0" Grid.Column="1" x:Name="txtNewLogin" Height="30" Margin="0,0,0,5"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" x:Name="txtNewLogin" Height="50" Margin="0,0,0,5"/>
                         <TextBlock Grid.Row="0" Grid.Column="3" Text="Пароль:" VerticalAlignment="Center" Margin="5,0,5,5"/>
-                        <PasswordBox Grid.Row="0" Grid.Column="4" x:Name="txtNewPassword" Height="30" Margin="0,0,0,5"/>
+                        <PasswordBox Grid.Row="0" Grid.Column="4" x:Name="txtNewPassword" Height="50" Margin="0,0,0,5"/>
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Роль:" VerticalAlignment="Center" Margin="0,0,5,0"/>
 
                         <ComboBox Grid.Row="1" Grid.Column="1" x:Name="cmbRoles" DisplayMemberPath="Name" Height="30"/>
